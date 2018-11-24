@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/bfv/static/css/main.ca6e3d2e.chunk.css"
   },
   {
-    "revision": "2c68c88b76342af1d7afe83fbf3342f1",
+    "revision": "b0f041e9e91a5f6029ab5808434e7c0f",
     "url": "/bfv/index.html"
   }
 ];
