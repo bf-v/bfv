@@ -35,12 +35,6 @@ export default class App extends Component {
         </div>
       );
     }
-    return (
-      <Viewer
-        links={this.state.file.filter(url => {
-          return url && url.includes("imgur") && url.includes("/a/");
-        })}
-      />
-    );
+    return <Viewer links={this.state.file} />;
   }
 }
