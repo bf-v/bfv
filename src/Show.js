@@ -2,25 +2,29 @@ import React from "react";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
-const Strategy = url => {
+const Iframe = ({ src, title, ...restProps }) => (
+  <iframe
+    title={title}
+    src={src}
+    frameBorder="0"
+    scrolling="no"
+    {...restProps}
+  />
+);
+
+const Strategy = ({ url }) => {
   switch (true) {
     case url.host === "i.imgur.com":
       if (url.pathname.slice(0, 3) === "/a/") {
         return (
-          <iframe
+          <Iframe
             title="imgur"
-            style={{
-              width: "100%",
-              height: "100%"
-            }}
             src={
               url.protocol +
               "//imgur.com/" +
               url.pathname.slice(1).replace(".jpg", "") +
               "/embed?pub=true"
             }
-            frameBorder="0"
-            scrolling="no"
           />
         );
       }
@@ -34,62 +38,38 @@ const Strategy = url => {
         />
       );
     case url.host === "gfycat.com":
-      return (
-        <iframe
-          title="gfycat"
-          src={url.origin + "/ifr" + url.pathname}
-          frameBorder="0"
-          scrolling="no"
-          style={{ width: "100%", height: "100%" }}
-        />
-      );
+      return <Iframe title="gfycat" src={url.origin + "/ifr" + url.pathname} />;
     case url.host === "www.xvideos.com":
       return (
-        <iframe
+        <Iframe
           title="xvideos"
           src={
             url.origin +
             "/embedframe/" +
             url.pathname.match(/\/video(\d+)\//)[1]
           }
-          frameBorder="0"
-          scrolling="no"
-          style={{ width: "100%", height: "100%" }}
         />
       );
     case url.host === "www.pornhub.com":
       return (
-        <iframe
+        <Iframe
           title="pornhub"
           src={url.origin + "/embed/" + url.searchParams.get("viewkey")}
-          frameBorder="0"
-          scrolling="no"
-          style={{ width: "100%", height: "100%" }}
         />
       );
     case url.host === "xhamster.com":
       return (
-        <iframe
+        <Iframe
           title="xhamster"
           src={url.origin + "/embed/" + url.pathname.split("/")[2]}
-          frameBorder="0"
-          scrolling="no"
-          style={{ width: "100%", height: "100%" }}
         />
       );
     default:
-      return (
-        <iframe
-          title="default"
-          src={url.href}
-          frameBorder="0"
-          style={{ width: "100%", height: "100%" }}
-        />
-      );
+      return <Iframe title="default" src={url.href} />;
   }
 };
 
 export default function Show({ link }) {
   const url = new URL(link);
-  return Strategy(url);
+  return <Strategy key={link} url={url} />;
 }
