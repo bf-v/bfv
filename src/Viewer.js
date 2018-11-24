@@ -20,6 +20,30 @@ export default class Viewer extends Component {
     };
   }
 
+  componentDidMount(){
+    window.addEventListener('keydown', this.handleKeys)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeys)
+  }
+
+  handleKeys = e => {
+    switch (e.code) {
+      case "ArrowLeft":
+      case "KeyA":
+        return this.prev();
+      case "ArrowRight":
+      case "KeyD":
+        return this.next();
+      case "ArrowDown":
+      case "KeyS":
+        return this.shuffle();
+      default:
+        return;
+    }
+  }
+
   next = () => {
     const { pos, q } = this.state;
     this.setState({ pos: Math.min(pos + 1, q.length - 1) });
