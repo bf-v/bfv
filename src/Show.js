@@ -31,10 +31,13 @@ const Strategy = ({ url }) => {
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
       return (
-        <img
-          src={url.href}
-          alt=""
-          style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "100%" }}
+        <div
+          style={{
+            backgroundImage: `url(${url.href})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "contain"
+          }}
         />
       );
     case url.host === "gfycat.com":
@@ -71,5 +74,5 @@ const Strategy = ({ url }) => {
 
 export default function Show({ link }) {
   const url = new URL(link);
-  return <Strategy key={link} url={url} />;
+  return <Strategy url={url} />;
 }

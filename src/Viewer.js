@@ -35,22 +35,20 @@ export default class Viewer extends Component {
   };
 
   render() {
+    const { q, pos } = this.state;
     return (
       <div className="viewer-container">
         <div className="button-container">
-          <button disabled={this.state.pos === 0} onClick={this.prev}>
+          <button disabled={pos === 0} onClick={this.prev}>
             Previous
           </button>
           <button onClick={this.shuffle}>Shuffle</button>
-          <button
-            disabled={this.state.pos === this.state.q.length - 1}
-            onClick={this.next}
-          >
+          <button disabled={pos === q.length - 1} onClick={this.next}>
             Next
           </button>
         </div>
         <div className="item-container">
-          <Show link={this.state.q[this.state.pos]} />
+          <Show key={q[pos]} link={q[pos]} />
         </div>
       </div>
     );
