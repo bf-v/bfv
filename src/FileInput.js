@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "./FileInput.css";
 
-const PINK = "rgb(255,92,148)";
-
 export default class FileInput extends Component {
   render() {
     return (
