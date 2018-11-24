@@ -6,7 +6,7 @@ export default class FileInput extends Component {
     return (
       <div className="file-input-container">
         <h1>BFV</h1>
-        <input id="file-input" type="file" accepts=".csv" onChange={this.props.onChange} />
+        <input id="file-input" type="file" accept=".csv" onChange={this.props.onChange} />
         <label htmlFor="file-input">Choose a file</label>
       </div>
     );
