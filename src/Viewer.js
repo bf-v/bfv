@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Show from "./Show";
+import "./Viewer.css";
 
 function shuffled(inp) {
   const arr = inp.slice();
@@ -35,49 +36,21 @@ export default class Viewer extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          backgroundColor: "black",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "stretch"
-        }}
-      >
-        <div
-          style={{
-            flexShrink: 0,
-            boxSizing: "border-box",
-            display: "flex",
-            justifyContent: "center",
-            padding: "10px 0",
-            height: 50
-          }}
-        >
+      <div className="viewer-container">
+        <div className="button-container">
           <button disabled={this.state.pos === 0} onClick={this.prev}>
-            &lt;
+            Previous
           </button>
-          <button onClick={this.shuffle}>shuffle</button>
+          <button onClick={this.shuffle}>Shuffle</button>
           <button
             disabled={this.state.pos === this.state.q.length - 1}
             onClick={this.next}
           >
-            &gt;
+            Next
           </button>
         </div>
-        <div style={{ height: "calc(100vh - 50px)" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              maxHeight: "100%",
-              height: "100%"
-            }}
-          >
-            <Show link={this.state.q[this.state.pos]} />
-          </div>
+        <div className="item-container">
+          <Show link={this.state.q[this.state.pos]} />
         </div>
       </div>
     );

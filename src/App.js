@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import FileInput from "./FileInput";
 import Viewer from "./Viewer";
 
 export default class App extends Component {
@@ -6,34 +7,32 @@ export default class App extends Component {
     super(props);
     this.fr = new FileReader();
     this.fr.addEventListener("loadend", () => {
-      // TODO: improve csv file checking
-      try {
-        const file = this.fr.result
-          .split("\n")
-          .map(row => row.split(",")[1])
-          .slice(1);
-        this.setState({ file });
-      } catch (err) {
-        this.setState({
-          error: "Could not parse file, make sure you extract the csv"
-        });
-      }
+      const file = this.fr.result
+        .split("\n")
+        .map(row => row.split(",")[1])
+        .slice(1);
+      this.setState({ file });
     });
-    this.state = { file: null, error: null };
+    this.state = { file: null };
   }
 
-  handleChange = files => this.fr.readAsText(files[0]);
+  handleChange = evt => this.fr.readAsText(evt.target.files[0]);
 
   render() {
     if (this.state.file === null) {
       return (
-        <>
-          <div>{this.state.error}</div>
-          <input
-            type="file"
-            onChange={e => this.handleChange(e.target.files)}
-          />
-        </>
+        <div
+          style={{
+            backgroundColor: "black",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <FileInput onChange={this.handleChange} />
+        </div>
       );
     }
     return (
