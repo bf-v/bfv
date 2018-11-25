@@ -28,14 +28,7 @@ const Strategy = ({ url }) => {
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
       return (
-        <div
-          style={{
-            backgroundImage: `url(${url.href})`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundSize: "contain"
-          }}
-        />
+        <div className="img" style={{ backgroundImage: `url(${url.href})` }} />
       );
     case url.host === "gfycat.com":
       title = "gfycat";
@@ -66,11 +59,9 @@ const Strategy = ({ url }) => {
       ].join("/");
       return (
         <div
+          className="img"
           style={{
-            backgroundImage: `url(${src_base}.jpg), url(${src_base}.png)`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundSize: "contain"
+            backgroundImage: `url(${src_base}.jpg), url(${src_base}.png)`
           }}
         />
       );
