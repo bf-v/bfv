@@ -16,7 +16,11 @@ just the ones that came up frequently for myself. The relevant code is located i
 
 ```
 case url.host === "gfycat.com":
-  return <Iframe title="gfycat" src={url.origin + "/ifr" + url.pathname} />;
+  title = "gfycat";
+  src = url.origin + "/ifr" + url.pathname;
+  break;
+// outside switch:
+return <Iframe src={src} title={title} />;
 ```
 
 The idea is that `Strategy` is a function that takes a js `URL` object and returns an HTML element that renders
