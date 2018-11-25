@@ -10,7 +10,8 @@ export default class App extends Component {
       const file = this.fr.result
         .split("\n")
         .map(row => row.split(",")[1])
-        .slice(1);
+        .slice(1)
+        .filter(x => !!x);
       this.setState({ file });
     });
     this.state = { file: null };
