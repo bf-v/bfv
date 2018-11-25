@@ -13,12 +13,16 @@ const Iframe = ({ src, title, ...restProps }) => (
 );
 
 const Strategy = ({ url }) => {
-  let title, src
+  let title, src;
   switch (true) {
     case url.host === "i.imgur.com":
       if (url.pathname.slice(0, 3) === "/a/") {
-        title = "imgur"
-        src = url.protocol + "//imgur.com/" + url.pathname.slice(1).replace(".jpg", "") + "/embed?pub=true"
+        title = "imgur";
+        src =
+          url.protocol +
+          "//imgur.com/" +
+          url.pathname.slice(1).replace(".jpg", "") +
+          "/embed?pub=true";
         break;
       }
     // eslint-disable-next-line -- FALLTHROUGH
@@ -34,31 +38,47 @@ const Strategy = ({ url }) => {
         />
       );
     case url.host === "gfycat.com":
-      title = "gfycat"
-      src = url.origin + '/ifr' + url.pathname
-      break
+      title = "gfycat";
+      src = url.origin + "/ifr" + url.pathname;
+      break;
     case url.host === "www.xvideos.com":
-      title = "xvideos"
-      src = url.origin + "/embedframe/" + url.pathname.match(/\/video(\d+)\//)[1]
-      break
+      title = "xvideos";
+      src =
+        url.origin + "/embedframe/" + url.pathname.match(/\/video(\d+)\//)[1];
+      break;
     case url.host === "www.pornhub.com":
-      title = "pornhub"
-      src = url.origin + "/embed/" + url.searchParams.get("viewkey")
-      break
+      title = "pornhub";
+      src = url.origin + "/embed/" + url.searchParams.get("viewkey");
+      break;
     case url.host === "xhamster.com":
-      title = "xhamster"
-      src =url.origin + "/embed/" + url.pathname.split("/")[2] 
-      break
+      title = "xhamster";
+      src = url.origin + "/embed/" + url.pathname.split("/")[2];
+      break;
     case url.host === "www.hentai-foundry.com":
-      title = "hentai-foundry"
-      const [username, pic_id] = url.pathname.match(/^\/pictures\/user\/(.*)\/(.*)\//).slice(1)
-      src = ["https://pictures.hentai-foundry.com",username[0].toLowerCase(),username, pic_id + ".jpg"].join("/")
-      break
+      const [username, pic_id] = url.pathname
+        .match(/^\/pictures\/user\/(.*)\/(.*)\//)
+        .slice(1);
+      const src_base = [
+        "https://pictures.hentai-foundry.com",
+        username[0].toLowerCase(),
+        username,
+        pic_id
+      ].join("/");
+      return (
+        <div
+          style={{
+            backgroundImage: `url(${src_base}.jpg), url(${src_base}.png)`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "contain"
+          }}
+        />
+      );
     default:
-      title = "default"
-      src = url.href
+      title = "default";
+      src = url.href;
   }
-  return <Iframe src={src} title={title}></Iframe>
+  return <Iframe src={src} title={title} />;
 };
 
 export default function Show({ link }) {
