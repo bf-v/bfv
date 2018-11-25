@@ -17,10 +17,11 @@
 
 .viewer-container .button-container button {
 	margin: 0 10px;
-	padding: 8px 12px;
+	padding: 2px 12px;
 	border-radius: 4px;
-	background-color: #ccc;
-	border-color: white;
+	color: #fff;
+	background-color: #6c757d;
+	border-color: #6c757d;
 }
 
 .viewer-container .button-container button:hover {
@@ -37,3 +38,16 @@
 .viewer-container .item-container > * {
 	flex-grow: 1;
 }
+
+.btn-group {
+	margin: 0 10px;
+}
+
+.btn-group button {
+	margin: 0 !important;
+}
+
+.dropdown-menu.show  {
+	background-color:#6c757d;
+}
+

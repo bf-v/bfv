@@ -1,22 +1,20 @@
 import React, { Component } from "react";
 import Show from "./Show";
 import "./Viewer.css";
-
-function shuffled(inp) {
-  const arr = inp.slice();
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
+import _ from "lodash";
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 
 export default class Viewer extends Component {
   constructor(props) {
     super(props);
+    
+    const { files, types} = this.props 
     this.state = {
-      q: shuffled(props.links),
-      pos: 0
+      currentType: types[0],
+      q: _.shuffle(files[types[0]]),
+      pos: 0,
+      dropdown: false
     };
   }
 
@@ -55,20 +53,46 @@ export default class Viewer extends Component {
   };
 
   shuffle = () => {
-    this.setState({ pos: 0, q: shuffled(this.state.q) });
+    this.setState({ pos: 0, q: _.shuffle(this.state.q) });
   };
 
+  toggle = () => {
+    this.setState({ dropdown: !this.state.dropdown });
+  }
+
+  select = (event) => {
+    const selected = event.target.innerText
+    this.setState({
+        currentType: selected,
+        q: _.shuffle(this.props.files[selected]),
+        pos: 0
+    })
+}
+
   render() {
-    const { q, pos } = this.state;
+    const { q, pos, dropdown, currentType } = this.state;
+    const { types } =  this.props
+    let dropItems = []
+    for (let key in types) {
+      dropItems.push(<DropdownItem key={key} onClick={this.select}>{types[key]}</DropdownItem>)
+    }
     return (
       <div className="viewer-container">
         <div className="button-container">
           <button disabled={pos === 0} onClick={this.prev}>
-            Previous
+            <FaCaretLeft size={40} color='#f8f9fa'/>
           </button>
           <button onClick={this.shuffle}>Shuffle</button>
+          <ButtonDropdown isOpen={dropdown} toggle={this.toggle}>
+            <DropdownToggle caret color="black">
+              {currentType}
+            </DropdownToggle>
+            <DropdownMenu>
+              {dropItems}
+            </DropdownMenu>
+          </ButtonDropdown>
           <button disabled={pos === q.length - 1} onClick={this.next}>
-            Next
+            <FaCaretRight size={40} color='#f8f9fa'/>
           </button>
         </div>
         <div className="item-container">
