@@ -1,4 +1,5 @@
 import React from "react";
+import "./Show.css"
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
