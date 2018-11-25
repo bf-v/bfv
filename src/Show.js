@@ -13,20 +13,13 @@ const Iframe = ({ src, title, ...restProps }) => (
 );
 
 const Strategy = ({ url }) => {
+  let title, src
   switch (true) {
     case url.host === "i.imgur.com":
       if (url.pathname.slice(0, 3) === "/a/") {
-        return (
-          <Iframe
-            title="imgur"
-            src={
-              url.protocol +
-              "//imgur.com/" +
-              url.pathname.slice(1).replace(".jpg", "") +
-              "/embed?pub=true"
-            }
-          />
-        );
+        title = "imgur"
+        src = url.protocol + "//imgur.com/" + url.pathname.slice(1).replace(".jpg", "") + "/embed?pub=true"
+        break;
       }
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
@@ -41,35 +34,31 @@ const Strategy = ({ url }) => {
         />
       );
     case url.host === "gfycat.com":
-      return <Iframe title="gfycat" src={url.origin + "/ifr" + url.pathname} />;
+      title = "gfycat"
+      src = url.origin + '/ifr' + url.pathname
+      break
     case url.host === "www.xvideos.com":
-      return (
-        <Iframe
-          title="xvideos"
-          src={
-            url.origin +
-            "/embedframe/" +
-            url.pathname.match(/\/video(\d+)\//)[1]
-          }
-        />
-      );
+      title = "xvideos"
+      src = url.origin + "/embedframe/" + url.pathname.match(/\/video(\d+)\//)[1]
+      break
     case url.host === "www.pornhub.com":
-      return (
-        <Iframe
-          title="pornhub"
-          src={url.origin + "/embed/" + url.searchParams.get("viewkey")}
-        />
-      );
+      title = "pornhub"
+      src = url.origin + "/embed/" + url.searchParams.get("viewkey")
+      break
     case url.host === "xhamster.com":
-      return (
-        <Iframe
-          title="xhamster"
-          src={url.origin + "/embed/" + url.pathname.split("/")[2]}
-        />
-      );
+      title = "xhamster"
+      src =url.origin + "/embed/" + url.pathname.split("/")[2] 
+      break
+    case url.host === "www.hentai-foundry.com":
+      title = "hentai-foundry"
+      const [username, pic_id] = url.pathname.match(/^\/pictures\/user\/(.*)\/(.*)\//).slice(1)
+      src = ["https://pictures.hentai-foundry.com",username[0].toLowerCase(),username, pic_id + ".jpg"].join("/")
+      break
     default:
-      return <Iframe title="default" src={url.href} />;
+      title = "default"
+      src = url.href
   }
+  return <Iframe src={src} title={title}></Iframe>
 };
 
 export default function Show({ link }) {
