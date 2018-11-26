@@ -12,6 +12,8 @@ function shuffled(inp) {
 }
 
 export default class App extends Component {
+  state = { shuffle: true };
+
   constructor(props) {
     super(props);
     this.fr = new FileReader();
@@ -22,18 +24,20 @@ export default class App extends Component {
         return;
       }
       // links is a list of (listname, source) tuples
-      const content = shuffled(
-        csv
-          .slice(1)
-          .filter(x => !!x)
-          .map(r => r.split(",").slice(0, 2))
-      );
+      let content = csv
+        .slice(1)
+        .filter(x => !!x)
+        .map(r => r.split(",").slice(0, 2));
+      content = this.state.shuffle ? shuffled(content) : content;
       this.setState({ content });
     });
     this.state = { content: null };
   }
 
-  handleChange = evt => this.fr.readAsText(evt.target.files[0]);
+  handleChange = (evt, shuffle) => {
+    this.setState({ shuffle });
+    this.fr.readAsText(evt.target.files[0]);
+  };
 
   render() {
     if (this.state.content === null) {

@@ -3,15 +3,15 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	color: white;
 }
 
 .file-input-container h1 {
-	color: white;
 	margin-bottom: 10px;
 }
 
 /* https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/ */
-.file-input-container input {
+.file-input-container #file-input {
 	position: absolute;
 	z-index: -1;
 	overflow: hidden;
@@ -20,19 +20,18 @@
 	height: 0.1px;
 }
 
-.file-input-container label {
+.file-input-container #choose-file-label {
 	background-color: rgb(255,92,148);
 	border-radius: 8px;
-	color: white;
 	padding: 20px;
 	font-size: 1.5em;
 }
 
-.file-input-container label:hover {
+.file-input-container #choose-file-label:hover {
 	cursor: pointer;
 }
 
-.file-input-container input:focus + label {
+.file-input-container input:focus + #choose-file-label {
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 5px;
 }

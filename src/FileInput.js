@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./FileInput.css";
 
 export default class FileInput extends Component {
+  state = { shuffle: true };
+
   render() {
     return (
       <div
@@ -11,18 +13,29 @@ export default class FileInput extends Component {
           height: "100%",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <div className="file-input-container">
           <h1>BFV</h1>
+          <label htmlFor="shuffle-checkbox" style={{ marginBottom: 20 }}>
+            <input
+              id="shuffle-checkbox"
+              type="checkbox"
+              checked={this.state.shuffle}
+              onChange={e => this.setState({ shuffle: e.target.checked })}
+            />
+            Shuffle
+          </label>
           <input
             id="file-input"
             type="file"
             accept=".csv"
-            onChange={this.props.onChange}
+            onChange={e => this.props.onChange(e, this.state.shuffle)}
           />
-          <label htmlFor="file-input">Choose a file</label>
+          <label id="choose-file-label" htmlFor="file-input">
+            Choose a file
+          </label>
         </div>
       </div>
     );
