@@ -1,13 +1,14 @@
 {
-  "main.css": "/bfv/static/css/main.84f82873.chunk.css",
-  "main.js": "/bfv/static/js/main.d6ed3760.chunk.js",
-  "main.js.map": "/bfv/static/js/main.d6ed3760.chunk.js.map",
-  "static/js/1.604798b9.chunk.js": "/bfv/static/js/1.604798b9.chunk.js",
-  "static/js/1.604798b9.chunk.js.map": "/bfv/static/js/1.604798b9.chunk.js.map",
+  "main.css": "/bfv/static/css/main.a30cfe16.chunk.css",
+  "main.js": "/bfv/static/js/main.d91772b1.chunk.js",
+  "main.js.map": "/bfv/static/js/main.d91772b1.chunk.js.map",
+  "static/js/1.6fde468d.chunk.js": "/bfv/static/js/1.6fde468d.chunk.js",
+  "static/js/1.6fde468d.chunk.js.map": "/bfv/static/js/1.6fde468d.chunk.js.map",
   "runtime~main.js": "/bfv/static/js/runtime~main.43a2f772.js",
   "runtime~main.js.map": "/bfv/static/js/runtime~main.43a2f772.js.map",
-  "static/css/main.84f82873.chunk.css.map": "/bfv/static/css/main.84f82873.chunk.css.map",
+  "static/media/Show.css": "/bfv/static/media/loading.e5848307.gif",
+  "static/css/main.a30cfe16.chunk.css.map": "/bfv/static/css/main.a30cfe16.chunk.css.map",
   "index.html": "/bfv/index.html",
-  "precache-manifest.6f39addee02684b98eee57ab62717a35.js": "/bfv/precache-manifest.6f39addee02684b98eee57ab62717a35.js",
+  "precache-manifest.387bf3956f5bfd3b1a5509995cdd22b1.js": "/bfv/precache-manifest.387bf3956f5bfd3b1a5509995cdd22b1.js",
   "service-worker.js": "/bfv/service-worker.js"
 }
