@@ -3,3 +3,23 @@ div.img {
 	background-position: center;
 	background-size: contain;
 }
+
+.item-container {
+	flex-grow: 1;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.item-container > * {
+	flex-grow: 1;
+}
+
+.iframe-loading {
+	background: url(./loading.gif) center center no-repeat;
+	display:flex;
+}
+
+.iframe-loading iframe {
+	flex-grow: 1;
+}

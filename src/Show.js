@@ -1,5 +1,5 @@
 import React from "react";
-import "./Show.css"
+import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
@@ -21,8 +21,8 @@ const Strategy = ({ url }) => {
         title = "imgur";
         src =
           url.protocol +
-          "//imgur.com/" +
-          url.pathname.slice(1).replace(".jpg", "") +
+          "//imgur.com" +
+          url.pathname.replace(".jpg", "") +
           "/embed?pub=true";
         break;
       }
@@ -62,7 +62,9 @@ const Strategy = ({ url }) => {
         <div
           className="img"
           style={{
-            backgroundImage: `url(${src_base}.jpg), url(${src_base}.png)`
+            backgroundImage: ["png", "jpg"]
+              .map(ext => `url(${src_base}.${ext})`)
+              .join(",")
           }}
         />
       );
@@ -70,10 +72,28 @@ const Strategy = ({ url }) => {
       title = "default";
       src = url.href;
   }
-  return <Iframe src={src} title={title} />;
+  return (
+    <div className="iframe-loading">
+      <Iframe src={src} title={title} />
+    </div>
+  );
 };
 
-export default function Show({ link }) {
-  const url = new URL(link);
-  return <Strategy url={url} />;
+export default function Show({ link: [list, source], style }) {
+  const url = new URL(source);
+  return (
+    <div key={source} className="item-container" style={style}>
+      <div
+        style={{
+          flexGrow: 0,
+          padding: 5,
+          paddingTop: 0,
+          color: "white"
+        }}
+      >
+        {list}
+      </div>
+      <Strategy url={url} />
+    </div>
+  );
 }

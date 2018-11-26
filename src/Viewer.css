@@ -26,14 +26,3 @@
 .viewer-container .button-container button:hover {
 	cursor: pointer;
 }
-
-.viewer-container .item-container {
-	flex-grow: 1;
-	padding: 10px;
-	display: flex;
-	flex-direction: column;
-}
-
-.viewer-container .item-container > * {
-	flex-grow: 1;
-}
