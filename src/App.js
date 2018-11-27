@@ -12,10 +12,9 @@ function shuffled(inp) {
 }
 
 export default class App extends Component {
-  state = { shuffle: true };
-
   constructor(props) {
     super(props);
+    this.state = { content: null, shuffle: true };
     this.fr = new FileReader();
     this.fr.addEventListener("loadend", () => {
       const csv = this.fr.result.split("\n");
@@ -31,7 +30,6 @@ export default class App extends Component {
       content = this.state.shuffle ? shuffled(content) : content;
       this.setState({ content });
     });
-    this.state = { content: null };
   }
 
   handleChange = (evt, shuffle) => {
