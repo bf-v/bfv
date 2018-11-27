@@ -91,8 +91,7 @@ export default class Viewer extends Component {
 
   renderButtonDropDown = () => {
     const isMobile = this.state.isMobile;
-    const { q, pos, dropdown, currentType, dropItems } = this.state;
-    const { types } =  this.props;
+    const { dropdown, currentType, dropItems } = this.state;
 
     if(isMobile){//mobile style
     return (<ButtonDropdown isOpen={dropdown} toggle={this.toggle}>
@@ -116,7 +115,7 @@ export default class Viewer extends Component {
   }
 
   renderButtonBar = () => {
-    const { q, pos, dropdown, currentType, isMobile } = this.state;
+    const { q, pos, isMobile } = this.state;
     if(isMobile){
       return <ButtonGroup vertical block className="button-container">
         <button disabled={pos === 0} onClick={this.prev}>
@@ -149,7 +148,7 @@ export default class Viewer extends Component {
   }
 
   render() {
-    const { q, pos, dropdown, currentType, isMobile } = this.state;
+    const { q, pos } = this.state;
 
     return (
       <div className="viewer-container">
