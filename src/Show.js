@@ -29,7 +29,9 @@ const Strategy = ({ url }) => {
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
       return (
-        <div className="img" style={{ backgroundImage: `url(${url.href})` }} />
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <img src={url.href} style={{ maxHeight: "70vh", maxWidth: "90vw" }} />
+        </div>
       );
     case url.host === "gfycat.com":
       title = "gfycat";
@@ -56,7 +58,7 @@ const Strategy = ({ url }) => {
         "https://pictures.hentai-foundry.com",
         username[0].toLowerCase(),
         username,
-        pic_id
+        pic_id,
       ].join("/");
       return (
         <div
@@ -64,7 +66,7 @@ const Strategy = ({ url }) => {
           style={{
             backgroundImage: ["png", "jpg"]
               .map(ext => `url(${src_base}.${ext})`)
-              .join(",")
+              .join(","),
           }}
         />
       );
@@ -88,7 +90,7 @@ export default function Show({ link: [list, source], style }) {
           flexGrow: 0,
           padding: 5,
           paddingTop: 0,
-          color: "white"
+          color: "white",
         }}
       >
         {list}
