@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./FileInput.css";
-const PapaParse = require('papaparse/papaparse.min.js');
+import PapaParse from "papaparse";
 
 export default class FileInput extends Component {
 
