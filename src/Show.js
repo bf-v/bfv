@@ -60,7 +60,7 @@ class Strategy extends React.PureComponent {
           return (
             <video
               src={gfycatUrl}
-              style={{ height: "70vh", width: "100%" }}
+              style={{ maxHeight: "70vh", width: "100%" }}
               autoPlay
               loop
               controls
