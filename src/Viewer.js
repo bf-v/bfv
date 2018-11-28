@@ -5,7 +5,6 @@ import "./Viewer.css";
 export default class Viewer extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = { pos: 0 };
   }
 
