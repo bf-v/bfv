@@ -1,21 +1,16 @@
 import React, { Component } from "react";
 import "./FileInput.css";
-const PapaParse = require('papaparse/papaparse.min.js');
+import PapaParse from "papaparse";
 
 export default class FileInput extends Component {
 
    handleChangeFile = e => {
     for (let value of e.target.files) {
-        let reader  = new FileReader()
-        const filename = value.name;
-        reader.onload = event => {
-            const csvData = PapaParse.parse(
-              event.target.result,
-            );
-            this.props.onFileLoaded(csvData.data, filename);
-          };
-
-        reader.readAsText(value);
+      PapaParse.parse(value, {
+        complete: (result) => {
+          this.props.onFileLoaded(result.data, value.name);
+        }
+      });
     }
   }
 
