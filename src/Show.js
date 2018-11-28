@@ -8,7 +8,12 @@ const getGfycatUrl = urlPathname => {
   const storageKey = "gfycatUrls";
 
   return new Promise((resolve, reject) => {
-    const gfycatUrls = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+    let gfycatUrls;
+    try {
+      gfycatUrls = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+    } catch (e) {
+      gfycatUrls = {};
+    }
     const entry = gfycatUrls[gfycatId];
     if (entry && entry.expiresAt > new Date()) {
       resolve(entry.url);
