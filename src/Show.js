@@ -3,6 +3,21 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
+class Gfycat extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { webmUrl: null };
+    fetch(`https://api.gfycat.com/v1/gfycats${props.url.pathname}`)
+      .then(r => r.json())
+      .then(data => this.setState({ webmUrl: data.gfyItem.webmUrl }))
+      .catch(err => console.error(err));
+  }
+
+  render() {
+    return <video autoPlay loop controls src={this.state.webmUrl} />;
+  }
+}
+
 class Iframe extends Component {
   constructor(props) {
     super(props);
@@ -73,9 +88,7 @@ const Strategy = ({ url }) => {
     case tumblr_re.test(url.host):
       return <Img url={url} />;
     case url.host === "gfycat.com":
-      title = "gfycat";
-      src = url.origin + "/ifr" + url.pathname;
-      break;
+      return <Gfycat url={url} />;
     case url.host === "www.xvideos.com":
       title = "xvideos";
       src =
