@@ -16,4 +16,6 @@ jobs:
           paths:
             - node_modules
       - run: npx react-scripts build
+      - run: git config --global user.email $GIT_EMAIL
+      - run: git config --global user.name $GIT_USER
       - run: npx gh-pages -d build
