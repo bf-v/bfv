@@ -3,13 +3,36 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
+const getGfycatUrl = urlPathname => {
+  const gfycatId = urlPathname.substr(1);
+  const storageKey = "gfycatUrls";
+
+  return new Promise((resolve, reject) => {
+    const gfycatUrls = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+    const entry = gfycatUrls[gfycatId];
+    if (entry && entry.expiresAt > new Date()) {
+      resolve(entry.url);
+      return;
+    }
+    fetch(`https://api.gfycat.com/v1/gfycats${urlPathname}`)
+      .then(r => r.json())
+      .then(data => {
+        const url = data.gfyItem.webmUrl;
+        const expiresAt = new Date().getTime() + 1 * 24 * 60 * 60 * 1000; // 1 day
+        gfycatUrls[gfycatId] = { url, expiresAt };
+        sessionStorage.setItem(storageKey, JSON.stringify(gfycatUrls));
+        resolve(url);
+      })
+      .catch(err => reject(err));
+  });
+};
+
 class Gfycat extends Component {
   constructor(props) {
     super(props);
     this.state = { webmUrl: null };
-    fetch(`https://api.gfycat.com/v1/gfycats${props.url.pathname}`)
-      .then(r => r.json())
-      .then(data => this.setState({ webmUrl: data.gfyItem.webmUrl }))
+    getGfycatUrl(props.url.pathname)
+      .then(webmUrl => this.setState({ webmUrl }))
       .catch(err => console.error(err));
   }
 
@@ -110,7 +133,7 @@ const Strategy = ({ url }) => {
         "https://pictures.hentai-foundry.com",
         username[0].toLowerCase(),
         username,
-        pic_id
+        pic_id,
       ].join("/");
       return (
         <div
@@ -118,7 +141,7 @@ const Strategy = ({ url }) => {
           style={{
             backgroundImage: ["png", "jpg"]
               .map(ext => `url(${src_base}.${ext})`)
-              .join(",")
+              .join(","),
           }}
         />
       );
@@ -138,7 +161,7 @@ export default function Show({ link: [list, source], style }) {
           flexGrow: 0,
           padding: 5,
           paddingTop: 0,
-          color: "white"
+          color: "white",
         }}
       >
         {list}
