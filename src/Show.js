@@ -138,7 +138,7 @@ const Strategy = ({ url }) => {
         "https://pictures.hentai-foundry.com",
         username[0].toLowerCase(),
         username,
-        pic_id,
+        pic_id
       ].join("/");
       return (
         <div
@@ -146,7 +146,7 @@ const Strategy = ({ url }) => {
           style={{
             backgroundImage: ["png", "jpg"]
               .map(ext => `url(${src_base}.${ext})`)
-              .join(","),
+              .join(",")
           }}
         />
       );
@@ -166,7 +166,7 @@ export default function Show({ link: [list, source], style }) {
           flexGrow: 0,
           padding: 5,
           paddingTop: 0,
-          color: "white",
+          color: "white"
         }}
       >
         {list}
