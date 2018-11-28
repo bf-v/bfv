@@ -16,15 +16,15 @@ div.img {
 }
 
 img.loading {
-	background: url(./loading.gif) center center no-repeat;
+	background: url(./static/loading.gif) center center no-repeat;
 }
 
 img.error {
-	background: url(./img_error.png) center center no-repeat;
+	background: url(./static/img_error.png) center center no-repeat;
 }
 
 .iframe-loading {
-	background: url(./loading.gif) center center no-repeat;
+	background: url(./static/loading.gif) center center no-repeat;
 	display:flex;
 }
 
