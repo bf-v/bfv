@@ -28,9 +28,7 @@ const Strategy = ({ url }) => {
       }
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
-      return (
-        <div className="img" style={{ backgroundImage: `url(${url.href})` }} />
-      );
+      return <img src={url.href} style={{ objectFit: "contain" }} />;
     case url.host === "gfycat.com":
       title = "gfycat";
       src = url.origin + "/ifr" + url.pathname;
