@@ -15,6 +15,9 @@ div.img {
 	flex-grow: 1;
 }
 
+img {
+	background: url(./loading.gif) center center no-repeat;
+}
 .iframe-loading {
 	background: url(./loading.gif) center center no-repeat;
 	display:flex;
