@@ -141,7 +141,7 @@ export default function Show({ link: [list, source], style }) {
           color: "white"
         }}
       >
-        {list}
+        {list} - <a href={url} target="_blank" rel="noopener noreferrer">Source</a>
       </div>
       <Strategy url={url} />
     </div>
