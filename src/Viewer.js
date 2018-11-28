@@ -45,6 +45,17 @@ export default class Viewer extends Component {
           }
         }
         return;
+      case "Space":
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+          const video = document.querySelector("video");
+          if (video) {
+            if (video.paused) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          }
+        }
       default:
         return;
     }
