@@ -99,11 +99,7 @@ const Strategy = ({ url }) => {
       title = "default";
       src = url.href;
   }
-  return (
-    <div className="iframe-loading">
-      <Iframe src={src} title={title} />
-    </div>
-  );
+  return <Iframe className="iframe-loading" src={src} title={title} />;
 };
 
 export default function Show({ link: [list, source], style }) {

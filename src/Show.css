@@ -27,7 +27,3 @@ img.error {
 	background: url(./static/loading.gif) center center no-repeat;
 	display:flex;
 }
-
-.iframe-loading iframe {
-	flex-grow: 1;
-}
