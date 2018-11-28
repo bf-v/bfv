@@ -20,10 +20,16 @@ export default class Viewer extends Component {
     switch (e.code) {
       case "ArrowLeft":
       case "KeyA":
-        return this.prev();
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+          this.prev();
+        }
+        return;
       case "ArrowRight":
       case "KeyD":
-        return this.next();
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+          this.next();
+        }
+        return;
       default:
         return;
     }
