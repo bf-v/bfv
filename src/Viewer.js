@@ -17,45 +17,39 @@ export default class Viewer extends Component {
   }
 
   handleKeys = e => {
+    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+      return;
+    }
+    const video = document.querySelector(".item-container > video");
+
     switch (e.code) {
       case "ArrowLeft":
       case "KeyA":
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
-          this.prev();
-        }
-        return;
+        return this.prev();
       case "ArrowRight":
       case "KeyD":
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
-          this.next();
-        }
-        return;
+        return this.next();
       case "KeyF":
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
-          const video = document.querySelector("video");
-          if (video) {
-            (
-              video.requestFullscreen ||
-              video.webkitRequestFullScreen ||
-              video.mozRequestFullScreen ||
-              video.msRequestFullScreen ||
-              video.webkitEnterFullScreen ||
-              (() => null)
-            ).bind(video)();
-          }
+        if (video) {
+          (
+            video.requestFullscreen ||
+            video.webkitRequestFullScreen ||
+            video.mozRequestFullScreen ||
+            video.msRequestFullScreen ||
+            video.webkitEnterFullScreen ||
+            (() => null)
+          ).bind(video)();
         }
         return;
       case "Space":
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
-          const video = document.querySelector("video");
-          if (video) {
-            if (video.paused) {
-              video.play();
-            } else {
-              video.pause();
-            }
+        if (video) {
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
           }
         }
+        return;
       default:
         return;
     }
@@ -63,13 +57,13 @@ export default class Viewer extends Component {
 
   next = () => {
     this.setState(({ pos }, { links: q }) => ({
-      pos: Math.min(pos + 1, q.length - 1),
+      pos: Math.min(pos + 1, q.length - 1)
     }));
   };
 
   prev = () => {
     this.setState(({ pos }) => ({
-      pos: Math.max(pos - 1, 0),
+      pos: Math.max(pos - 1, 0)
     }));
   };
 
