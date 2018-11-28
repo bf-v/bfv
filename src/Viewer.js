@@ -24,6 +24,21 @@ export default class Viewer extends Component {
       case "ArrowRight":
       case "KeyD":
         return this.next();
+      case "KeyF":
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+          const video = document.querySelector("video");
+          if (video) {
+            (
+              video.requestFullscreen ||
+              video.webkitRequestFullScreen ||
+              video.mozRequestFullScreen ||
+              video.msRequestFullScreen ||
+              video.webkitEnterFullScreen ||
+              (() => null)
+            ).bind(video)();
+          }
+        }
+        return;
       default:
         return;
     }
@@ -31,13 +46,13 @@ export default class Viewer extends Component {
 
   next = () => {
     this.setState(({ pos }, { links: q }) => ({
-      pos: Math.min(pos + 1, q.length - 1)
+      pos: Math.min(pos + 1, q.length - 1),
     }));
   };
 
   prev = () => {
     this.setState(({ pos }) => ({
-      pos: Math.max(pos - 1, 0)
+      pos: Math.max(pos - 1, 0),
     }));
   };
 
