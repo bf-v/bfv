@@ -6,12 +6,15 @@ div.img {
   	transition: opacity 2s linear;
 }
 
-.iframe-loading {
-	background: url(./loading.gif) center center no-repeat;
-	display:flex;
-	
+img.loading {
+	background: url(./static/loading.gif) center center no-repeat;
 }
 
-.iframe-loading iframe {
-	flex-grow: 1;
+img.error {
+	background: url(./static/img_error.png) center center no-repeat;
+}
+
+.iframe-loading {
+	background: url(./static/loading.gif) center center no-repeat;
+	display:flex;
 }

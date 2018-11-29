@@ -1,17 +1,75 @@
-import React from "react";
+import React, { Component } from "react";
 import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
-const Iframe = ({ src, title, ...restProps }) => (
-  <iframe
-    title={title}
-    src={src}
-    frameBorder="0"
-    scrolling="no"
-    {...restProps}
-  />
-);
+class Gfycat extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { webmUrl: null };
+    fetch(`https://api.gfycat.com/v1/gfycats${props.url.pathname}`)
+      .then(r => r.json())
+      .then(data => this.setState({ webmUrl: data.gfyItem.webmUrl }))
+      .catch(err => console.error(err));
+  }
+
+  render() {
+    return <video autoPlay loop controls src={this.state.webmUrl} />;
+  }
+}
+
+class Iframe extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: true };
+  }
+
+  imgLoaded = () => this.setState({ loading: false });
+
+  render() {
+    const { src, title, ...restProps } = this.props;
+    return (
+      <iframe
+        className={this.state.loading ? "iframe-loading" : ""}
+        onLoad={this.imgLoaded}
+        title={title}
+        src={src}
+        frameBorder="0"
+        scrolling="no"
+        {...restProps}
+      />
+    );
+  }
+}
+
+class Img extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: true, error: false };
+  }
+
+  imgLoaded = () => this.setState({ loading: false });
+
+  imgErrored = () => this.setState({ loading: false, error: true });
+
+  render() {
+    const className = this.state.loading
+      ? "loading"
+      : this.state.error
+      ? "error"
+      : "";
+    return (
+      <img
+        className={className}
+        alt=""
+        src={this.props.url.href}
+        onLoad={this.imgLoaded}
+        onError={this.imgErrored}
+        style={{ objectFit: "contain" }}
+      />
+    );
+  }
+}
 
 const Strategy = ({ url }) => {
   let title, src;
@@ -28,13 +86,9 @@ const Strategy = ({ url }) => {
       }
     // eslint-disable-next-line -- FALLTHROUGH
     case tumblr_re.test(url.host):
-      return (
-        <div className="img" style={{ backgroundImage: `url(${url.href})` }} />
-      );
+      return <Img url={url} />;
     case url.host === "gfycat.com":
-      title = "gfycat";
-      src = url.origin + "/ifr" + url.pathname;
-      break;
+      return <Gfycat url={url} />;
     case url.host === "www.xvideos.com":
       title = "xvideos";
       src =
@@ -72,11 +126,7 @@ const Strategy = ({ url }) => {
       title = "default";
       src = url.href;
   }
-  return (
-    <div className="iframe-loading">
-      <Iframe src={src} title={title} />
-    </div>
-  );
+  return <Iframe src={src} title={title} />;
 };
 
 export default function Show({ link: [list, source], style }) {

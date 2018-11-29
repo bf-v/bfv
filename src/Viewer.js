@@ -3,7 +3,7 @@ import Show from "./Show";
 import "./Viewer.css";
 import _ from "lodash";
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, ButtonGroup } from "reactstrap";
-import { FaCaretLeft, FaCaretRight, FaRandom, FaStarOfLife } from "react-icons/fa";
+import { FaCaretLeft, FaCaretRight, FaStarOfLife } from "react-icons/fa";
 
 
 export default class Viewer extends Component {
@@ -12,12 +12,6 @@ export default class Viewer extends Component {
     
     const { content, types} = this.props;
 
-    //only need to be generated once
-    let dropItemsLocal = [];
-    for (let key in types) {
-      dropItemsLocal.push(<DropdownItem key={key} onClick={this.select}>{types[key]}</DropdownItem>)
-    }
-
     this.state = {
       currentType: types[0],
       q: _.shuffle(content[types[0]]),
@@ -25,9 +19,25 @@ export default class Viewer extends Component {
       dropdown: false,
       WindowWidth: window.innerWidth,
       isMobile: window.innerWidth <= 600,
-      dropItems: dropItemsLocal,
+      dropItems: this.createDropItems(),
       ButtonIconSize: 40 
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.types !== prevProps.types) {
+      this.setState({dropItems: this.createDropItems()})
+    }
+  }
+
+  createDropItems = () => {
+    const { types } = this.props
+    let dropItems = [];
+    for (let key in types) {
+      dropItems.push(<DropdownItem key={key} onClick={this.select}>{types[key]}</DropdownItem>)
+    }
+    return dropItems
+
   }
 
   componentDidMount(){
@@ -38,7 +48,6 @@ export default class Viewer extends Component {
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeys);
     window.removeEventListener('resize', this.handleWindowSizeChange);
-    //this.setstate = { pos: 0 };
   }
 
   handleKeys = e => {
@@ -75,7 +84,7 @@ export default class Viewer extends Component {
     const selected = event.target.innerText
     this.setState({
         currentType: selected,
-        q: _.shuffle(this.props.files[selected]),
+        q: _.shuffle(this.props.content[selected]),
         pos: 0
     })
   }
@@ -88,8 +97,7 @@ export default class Viewer extends Component {
   }
 
   renderButtonDropDown = () => {
-    const isMobile = this.state.isMobile;
-    const { dropdown, currentType, dropItems } = this.state;
+    const { dropdown, currentType, dropItems, isMobile } = this.state;
 
     if(isMobile){//mobile style
     return (<ButtonDropdown className="dropdown-selector" isOpen={dropdown} toggle={this.toggle}>

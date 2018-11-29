@@ -33,7 +33,7 @@ export default class App extends Component {
     }
 
     contentTypes = _.sortBy(contentTypes)
-    
+
     this.setState({
         content: items,
         types: contentTypes
