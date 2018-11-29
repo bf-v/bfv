@@ -8,13 +8,7 @@ jobs:
           fingerprints:
             - "bb:55:52:6c:68:0e:90:15:69:ff:b3:1f:49:51:e6:8d"
       - checkout
-      - restore_cache:
-          key: lock-{{ checksum "package-lock.json" }}
       - run: npm ci
-      - save_cache:
-          key: lock-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
       - run: npx react-scripts build
       - run: git config --global user.email $GIT_EMAIL
       - run: git config --global user.name $GIT_USER
