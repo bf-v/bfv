@@ -2,7 +2,7 @@
   "name": "bf_viewer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ImaginaryLost.github.io/bfv",
+  "homepage": "https://bf-v.github.io/bfv",
   "dependencies": {
     "bootstrap": "^4.1.3",
     "lodash": "^4.17.11",
