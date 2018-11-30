@@ -3,18 +3,30 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
+const getStore = storageKey => {
+  let store;
+  try {
+    store = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+  } catch (e) {
+    store = {};
+  }
+  return {
+    get(key) {
+      return store[key];
+    },
+    set(key, value) {
+      store[key] = value;
+      sessionStorage.setItem(storageKey, JSON.stringify(store));
+    },
+  };
+};
+
 const getGfycatUrl = urlPathname => {
   const gfycatId = urlPathname.substr(1);
-  const storageKey = "gfycatUrls";
+  const store = getStore("gfycatUrls");
 
   return new Promise((resolve, reject) => {
-    let gfycatUrls;
-    try {
-      gfycatUrls = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
-    } catch (e) {
-      gfycatUrls = {};
-    }
-    const entry = gfycatUrls[gfycatId];
+    const entry = store.get(gfycatId);
     if (entry && entry.expiresAt > new Date()) {
       resolve(entry.url);
       return;
@@ -24,8 +36,7 @@ const getGfycatUrl = urlPathname => {
       .then(data => {
         const url = data.gfyItem.webmUrl;
         const expiresAt = new Date().getTime() + 1 * 24 * 60 * 60 * 1000; // 1 day
-        gfycatUrls[gfycatId] = { url, expiresAt };
-        sessionStorage.setItem(storageKey, JSON.stringify(gfycatUrls));
+        store.set(gfycatId, { url, expiresAt });
         resolve(url);
       })
       .catch(err => reject(err));
