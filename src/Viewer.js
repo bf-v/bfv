@@ -98,51 +98,29 @@ export default class Viewer extends Component {
 
   renderButtonDropDown = () => {
     const { dropdown, currentType, dropItems, isMobile } = this.state;
-
-    if(isMobile){//mobile style
-    return (<ButtonDropdown className="dropdown-selector" isOpen={dropdown} toggle={this.toggle}>
-      <DropdownToggle color="black">
-        <FaStarOfLife size={this.state.ButtonIconSize} color='#f8f9fa'/>
-      </DropdownToggle>
-      <DropdownMenu>
-        {dropItems}
-      </DropdownMenu>
-    </ButtonDropdown>)
-    }else{ //desktop style
-    return (<ButtonDropdown className="dropdown-selector" isOpen={dropdown} toggle={this.toggle}>
-      <DropdownToggle caret color="black">
-        {currentType}
-      </DropdownToggle>
-      <DropdownMenu>
-        {dropItems}
-      </DropdownMenu>
-    </ButtonDropdown>)
+    let toggle = isMobile ? <FaStarOfLife size={this.state.ButtonIconSize} color='#f8f9fa'/> : currentType
+    return (
+      <ButtonDropdown className="dropdown-selector" isOpen={dropdown} toggle={this.toggle}>
+        <DropdownToggle color="black" caret={!isMobile}>
+          {toggle}
+        </DropdownToggle>
+        <DropdownMenu>
+          {dropItems}
+        </DropdownMenu>
+      </ButtonDropdown>)
     }
-  }
 
   renderButtonBar = () => {
     const { q, pos, isMobile } = this.state;
-    if(isMobile){
-      return <ButtonGroup vertical block className="button-container">
-        <button disabled={pos === 0} onClick={this.prev}>
-          <FaCaretLeft size={this.state.ButtonIconSize} color='#f8f9fa'/>
-        </button>
-        { this.renderButtonDropDown() }
-        <button disabled={pos === q.length - 1} onClick={this.next}>
-          <FaCaretRight size={this.state.ButtonIconSize} color='#f8f9fa'/>
-        </button>
-      </ButtonGroup>
-    }else{
-      return <ButtonGroup className="button-container">
-        <button disabled={pos === 0} onClick={this.prev}>
-          <FaCaretLeft size={this.state.ButtonIconSize} color='#f8f9fa'/>
-        </button>
-        { this.renderButtonDropDown() }
-        <button disabled={pos === q.length - 1} onClick={this.next}>
-          <FaCaretRight size={this.state.ButtonIconSize} color='#f8f9fa'/>
-        </button>
-      </ButtonGroup>
-    }
+    return <ButtonGroup vertical={isMobile} block className="button-container">
+      <button disabled={pos === 0} onClick={this.prev}>
+        <FaCaretLeft size={this.state.ButtonIconSize} color='#f8f9fa'/>
+      </button>
+      { this.renderButtonDropDown() }
+      <button disabled={pos === q.length - 1} onClick={this.next}>
+        <FaCaretRight size={this.state.ButtonIconSize} color='#f8f9fa'/>
+      </button>
+    </ButtonGroup>
   }
 
   render() {
