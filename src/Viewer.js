@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Show from "./Show";
 import "./Viewer.css";
-import _ from "lodash";
+import shuffle from "lodash/shuffle";
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, ButtonGroup } from "reactstrap";
 import { FaCaretLeft, FaCaretRight, FaStarOfLife } from "react-icons/fa";
 
@@ -10,34 +10,39 @@ export default class Viewer extends Component {
   constructor(props) {
     super(props);
     
-    const { content, types} = this.props;
+    const { content } = this.props;
 
+    const types = Object.keys(content).sort();
     this.state = {
       currentType: types[0],
-      q: _.shuffle(content[types[0]]),
+      types: types,
+      q: shuffle(content[types[0]]),
       pos: 0,
       dropdown: false,
-      WindowWidth: window.innerWidth,
       isMobile: window.innerWidth <= 600,
       dropItems: this.createDropItems(),
       ButtonIconSize: 40 
     };
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.types !== prevProps.types) {
-      this.setState({dropItems: this.createDropItems()})
+  componentDidUpdate() {
+    const { content } = this.props;
+    let newTypes = Object.keys(content).sort();
+    if (this.state.types.length !== newTypes.length) {
+      this.setState({
+        types: newTypes,
+        currentType: newTypes[0],
+        q: shuffle(content[newTypes[0]]),
+        dropItems: this.createDropItems()
+      })
     }
   }
 
   createDropItems = () => {
-    const { types } = this.props
-    let dropItems = [];
-    for (let key in types) {
-      dropItems.push(<DropdownItem key={key} onClick={this.select}>{types[key]}</DropdownItem>)
-    }
-    return dropItems
-
+    const { content } = this.props
+    return Object.keys(content).sort().map((contentType, index) => {
+      return (<DropdownItem key={index} onClick={this.select}>{contentType}</DropdownItem>)
+    })
   }
 
   componentDidMount(){
@@ -84,15 +89,14 @@ export default class Viewer extends Component {
     const selected = event.target.innerText
     this.setState({
         currentType: selected,
-        q: _.shuffle(this.props.content[selected]),
+        q: shuffle(this.props.content[selected]),
         pos: 0
     })
   }
 
   handleWindowSizeChange = () => {
     this.setState({ 
-      WindowWidth: window.innerWidth,
-      isMobile : this.state.WindowWidth <= 600
+      isMobile: window.innerWidth <= 600
     });
   }
 
@@ -112,7 +116,7 @@ export default class Viewer extends Component {
 
   renderButtonBar = () => {
     const { q, pos, isMobile } = this.state;
-    return <ButtonGroup vertical={isMobile} block className="button-container">
+    return <ButtonGroup vertical={isMobile} className="button-container">
       <button disabled={pos === 0} onClick={this.prev}>
         <FaCaretLeft size={this.state.ButtonIconSize} color='#f8f9fa'/>
       </button>
