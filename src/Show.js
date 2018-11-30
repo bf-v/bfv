@@ -3,13 +3,20 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
-const getStore = storageKey => {
+const getGfycatUrlStore = () => {
+  const storageKey = "gfycatUrls";
   let store;
   try {
     store = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
   } catch (e) {
     store = {};
   }
+  Object.keys(store).forEach(id => {
+    if (store[id].expiresAt <= new Date()) {
+      delete store[id];
+    }
+  });
+  sessionStorage.setItem(storageKey, JSON.stringify(store));
   return {
     get(key) {
       return store[key];
@@ -23,7 +30,7 @@ const getStore = storageKey => {
 
 const getGfycatUrl = urlPathname => {
   const gfycatId = urlPathname.substr(1);
-  const store = getStore("gfycatUrls");
+  const store = getGfycatUrlStore();
 
   return new Promise((resolve, reject) => {
     const entry = store.get(gfycatId);
