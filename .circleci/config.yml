@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
     docker:
       - image: node:10
     steps:
@@ -13,12 +16,3 @@ jobs:
       - run: git config --global user.email $GIT_EMAIL
       - run: git config --global user.name $GIT_USER
       - run: npx gh-pages -d build
-
-workflows:
-  version: 2
-  main:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: master
