@@ -56,6 +56,11 @@ export default class Viewer extends Component {
   }
 
   handleKeys = e => {
+    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+      return;
+    }
+    const video = document.querySelector(".item-container > video");
+
     switch (e.code) {
       case "ArrowLeft":
       case "KeyA":
@@ -63,6 +68,27 @@ export default class Viewer extends Component {
       case "ArrowRight":
       case "KeyD":
         return this.next();
+      case "KeyF":
+        if (video) {
+          (
+            video.requestFullscreen ||
+            video.webkitRequestFullScreen ||
+            video.mozRequestFullScreen ||
+            video.msRequestFullScreen ||
+            video.webkitEnterFullScreen ||
+            (() => null)
+          ).bind(video)();
+        }
+        return;
+      case "Space":
+        if (video) {
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        }
+        return;
       default:
         return;
     }
@@ -128,12 +154,12 @@ export default class Viewer extends Component {
   }
 
   render() {
-    const { pos, q, currentType } = this.state;
+    const { pos, q } = this.state;
 
     return (
       <div className="viewer-container">
         { this.renderButtonBar() }
-        <Show link={[currentType, q[pos]]} />
+        <Show link={q[pos]} />
       </div>
     );
   }

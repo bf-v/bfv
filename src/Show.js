@@ -129,10 +129,11 @@ const Strategy = ({ url }) => {
   return <Iframe src={src} title={title} />;
 };
 
-export default function Show({ link: [list, source], style }) {
+export default function Show({ link: source, style }) {
   const url = new URL(source);
   return (
     <div key={source} className="item-container" style={style}>
+      <a href={url} target="_blank" rel="noopener noreferrer">Source</a>
       <Strategy url={url} />
     </div>
   );
