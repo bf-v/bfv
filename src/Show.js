@@ -3,13 +3,45 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
+const gfycatStoreKey = "gfycatUrls";
+const GfycatStore = (() => {
+  let store;
+  try {
+    store = JSON.parse(localStorage.getItem(gfycatStoreKey) || "{}");
+  } catch (e) {
+    store = {};
+  }
+
+  const cleanExpired = () => {
+    const now = new Date();
+    for (const id in store) {
+      if (store[id].expiresAt <= now) delete store[id];
+    }
+  };
+
+  return {
+    get: async gfyId => {
+      cleanExpired();
+      if (!(gfyId in store)) {
+        const resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
+        const json = await resp.json();
+        store[gfyId] = {
+          url: json.gfyItem.webmUrl,
+          expiresAt: new Date().getTime() + 1 * 24 * 60 * 60 * 1000 // 1 day
+        };
+      }
+      localStorage.setItem(gfycatStoreKey, JSON.stringify(store));
+      return store[gfyId].url;
+    }
+  };
+})();
+
 class Gfycat extends Component {
   constructor(props) {
     super(props);
     this.state = { webmUrl: null };
-    fetch(`https://api.gfycat.com/v1/gfycats${props.url.pathname}`)
-      .then(r => r.json())
-      .then(data => this.setState({ webmUrl: data.gfyItem.webmUrl }))
+    GfycatStore.get(props.url.pathname.substr(1))
+      .then(webmUrl => this.setState({ webmUrl }))
       .catch(err => console.error(err));
   }
 
