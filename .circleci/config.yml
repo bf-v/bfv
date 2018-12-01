@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    docker:
+      - image: node:10
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "bb:55:52:6c:68:0e:90:15:69:ff:b3:1f:49:51:e6:8d"
+      - checkout
+      - run: npm ci
+      - run: npx react-scripts build
+      - deploy:
+          name: Deploy to gh-pages
+          command: |
+            git config --global user.email $GIT_EMAIL
+            git config --global user.name $GIT_USER
+            git clone $CIRCLE_REPOSITORY_URL out
+            cd out
+            git checkout gh-pages || git checkout --orphan gh-pages
+            git rm -rf .
+            cd ..
+            cp -a build/. out/.
+            mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
+            cd out
+            git add -A
+            git commit -m "deploy ${CIRCLE_SHA1}" --allow-empty
+            git push origin gh-pages
