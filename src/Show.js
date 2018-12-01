@@ -168,6 +168,7 @@ export default function Show({ link: [list, source], style }) {
       <div
         style={{
           flexGrow: 0,
+          flexShrink: 0,
           padding: 5,
           paddingTop: 0,
           color: "white"
