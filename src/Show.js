@@ -3,58 +3,44 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
-const getGfycatUrlStore = () => {
-  const storageKey = "gfycatUrls";
+const gfycatStoreKey = "gfycatUrls";
+const GfycatStore = (() => {
   let store;
   try {
-    store = JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+    store = JSON.parse(localStorage.getItem(gfycatStoreKey) || "{}");
   } catch (e) {
     store = {};
   }
-  Object.keys(store).forEach(id => {
-    if (store[id].expiresAt <= new Date()) {
-      delete store[id];
+
+  const cleanExpired = () => {
+    const now = new Date();
+    for (const id in store) {
+      if (store[id].expiresAt <= now) delete store[id];
     }
-  });
-  sessionStorage.setItem(storageKey, JSON.stringify(store));
-  return {
-    get(key) {
-      return store[key];
-    },
-    set(key, value) {
-      store[key] = value;
-      sessionStorage.setItem(storageKey, JSON.stringify(store));
-    },
   };
-};
 
-const getGfycatUrl = urlPathname => {
-  const gfycatId = urlPathname.substr(1);
-  const store = getGfycatUrlStore();
-
-  return new Promise((resolve, reject) => {
-    const entry = store.get(gfycatId);
-    if (entry && entry.expiresAt > new Date()) {
-      resolve(entry.url);
-      return;
+  return {
+    get: async gfyId => {
+      cleanExpired();
+      if (!(gfyId in store)) {
+        const resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
+        const json = await resp.json();
+        store[gfyId] = {
+          url: json.gfyItem.webmUrl,
+          expiresAt: new Date().getTime() + 1 * 24 * 60 * 60 * 1000 // 1 day
+        };
+      }
+      localStorage.setItem(gfycatStoreKey, JSON.stringify(store));
+      return store[gfyId].url;
     }
-    fetch(`https://api.gfycat.com/v1/gfycats${urlPathname}`)
-      .then(r => r.json())
-      .then(data => {
-        const url = data.gfyItem.webmUrl;
-        const expiresAt = new Date().getTime() + 1 * 24 * 60 * 60 * 1000; // 1 day
-        store.set(gfycatId, { url, expiresAt });
-        resolve(url);
-      })
-      .catch(err => reject(err));
-  });
-};
+  };
+})();
 
 class Gfycat extends Component {
   constructor(props) {
     super(props);
     this.state = { webmUrl: null };
-    getGfycatUrl(props.url.pathname)
+    GfycatStore.get(props.url.pathname.substr(1))
       .then(webmUrl => this.setState({ webmUrl }))
       .catch(err => console.error(err));
   }
