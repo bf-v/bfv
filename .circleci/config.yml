@@ -13,6 +13,18 @@ jobs:
       - checkout
       - run: npm ci
       - run: npx react-scripts build
-      - run: git config --global user.email $GIT_EMAIL
-      - run: git config --global user.name $GIT_USER
-      - run: npx gh-pages -d build
+      - deploy:
+          name: Deploy to gh-pages
+          command: |
+            git config --global user.email $GIT_EMAIL
+            git config --global user.name $GIT_USER
+            git clone $CIRCLE_REPOSITORY_URL out
+            git checkout gh-pages || git checkout --orphan gh-pages
+            git rm -rf .
+            cd ..
+            cp -a build/. out/.
+            mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
+            cd out
+            git add -A
+            git commit -m "deploy ${CIRCLE_SHA1}" --allow-empty
+            git push origin gh-pages
