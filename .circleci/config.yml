@@ -19,6 +19,7 @@ jobs:
             git config --global user.email $GIT_EMAIL
             git config --global user.name $GIT_USER
             git clone $CIRCLE_REPOSITORY_URL out
+            cd out
             git checkout gh-pages || git checkout --orphan gh-pages
             git rm -rf .
             cd ..
