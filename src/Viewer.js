@@ -5,7 +5,7 @@ import "./Viewer.css";
 export default class Viewer extends Component {
   constructor(props) {
     super(props);
-    this.state = { pos: 0 };
+    this.state = { pos: 0, list: Object.keys(props.links)[0] };
   }
 
   componentDidMount() {
@@ -56,8 +56,8 @@ export default class Viewer extends Component {
   };
 
   next = () => {
-    this.setState(({ pos }, { links: q }) => ({
-      pos: Math.min(pos + 1, q.length - 1)
+    this.setState(({ pos, list }, { links }) => ({
+      pos: Math.min(pos + 1, links[list].length - 1)
     }));
   };
 
@@ -68,7 +68,7 @@ export default class Viewer extends Component {
   };
 
   render() {
-    const { pos } = this.state;
+    const { pos, list } = this.state;
     const { links } = this.props;
     return (
       <div className="viewer-container">
@@ -76,11 +76,19 @@ export default class Viewer extends Component {
           <button disabled={pos === 0} onClick={this.prev}>
             Previous
           </button>
-          <button disabled={pos === links.length - 1} onClick={this.next}>
+          <select
+            value={list}
+            onChange={e => this.setState({ list: e.target.value })}
+          >
+            {Object.keys(links).map(l => (
+              <option value={l}>{l}</option>
+            ))}
+          </select>
+          <button disabled={pos === links[list].length - 1} onClick={this.next}>
             Next
           </button>
         </div>
-        <Show link={links[pos]} />
+        <Show link={links[list][pos]} />
       </div>
     );
   }
