@@ -40,7 +40,7 @@ export default LinkConsumer =>
     };
 
     render() {
-      if (Object.keys(this.state).length == 0) {
+      if (Object.keys(this.state).length === 0) {
         return (
           <div
             style={{
