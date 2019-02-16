@@ -27,12 +27,12 @@ const GfycatStore = (() => {
         const json = await resp.json();
         store[gfyId] = {
           url: json.gfyItem.webmUrl,
-          expiresAt: new Date().getTime() + 1 * 24 * 60 * 60 * 1000 // 1 day
+          expiresAt: new Date().getTime() + 1 * 24 * 60 * 60 * 1000, // 1 day
         };
       }
       localStorage.setItem(gfycatStoreKey, JSON.stringify(store));
       return store[gfyId].url;
-    }
+    },
   };
 })();
 
@@ -45,8 +45,34 @@ class Gfycat extends Component {
       .catch(err => console.error(err));
   }
 
+  componentDidMount() {
+    if (this.video && this.props.keepFullScreen) {
+      const { video } = this;
+      setTimeout(
+        () =>
+          (
+            video.requestFullscreen ||
+            video.webkitRequestFullScreen ||
+            video.mozRequestFullScreen ||
+            video.msRequestFullScreen ||
+            video.webkitEnterFullScreen ||
+            (() => null)
+          ).bind(video)(),
+        100,
+      );
+    }
+  }
+
   render() {
-    return <video autoPlay loop controls src={this.state.webmUrl} />;
+    return (
+      <video
+        ref={v => (this.video = v)}
+        autoPlay
+        loop
+        controls
+        src={this.state.webmUrl}
+      />
+    );
   }
 }
 
@@ -103,7 +129,7 @@ class Img extends Component {
   }
 }
 
-const Strategy = ({ url }) => {
+const Strategy = ({ url, keepFullScreen }) => {
   let title, src;
   switch (true) {
     case url.host === "i.imgur.com":
@@ -120,7 +146,7 @@ const Strategy = ({ url }) => {
     case tumblr_re.test(url.host):
       return <Img url={url} />;
     case url.host === "gfycat.com":
-      return <Gfycat url={url} />;
+      return <Gfycat url={url} keepFullScreen={keepFullScreen} />;
     case url.host === "www.xvideos.com":
       title = "xvideos";
       src =
@@ -142,7 +168,7 @@ const Strategy = ({ url }) => {
         "https://pictures.hentai-foundry.com",
         username[0].toLowerCase(),
         username,
-        pic_id
+        pic_id,
       ].join("/");
       return (
         <div
@@ -150,7 +176,7 @@ const Strategy = ({ url }) => {
           style={{
             backgroundImage: ["png", "jpg"]
               .map(ext => `url(${src_base}.${ext})`)
-              .join(",")
+              .join(","),
           }}
         />
       );
@@ -161,7 +187,7 @@ const Strategy = ({ url }) => {
   return <Iframe src={src} title={title} />;
 };
 
-export default function Show({ link: source, style }) {
+export default function Show({ link: source, style, keepFullScreen }) {
   const url = new URL(source);
   return (
     <div key={source} className="item-container" style={style}>
@@ -171,14 +197,14 @@ export default function Show({ link: source, style }) {
           flexShrink: 0,
           padding: 5,
           paddingTop: 0,
-          color: "white"
+          color: "white",
         }}
       >
         <a href={url} target="_blank" rel="noopener noreferrer">
           Source
         </a>
       </div>
-      <Strategy url={url} />
+      <Strategy url={url} keepFullScreen={keepFullScreen} />
     </div>
   );
 }
