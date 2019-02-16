@@ -5,16 +5,48 @@ import "./Viewer.css";
 export default class Viewer extends Component {
   constructor(props) {
     super(props);
-    this.state = { pos: 0, list: Object.keys(props.links)[0] };
+    this.state = {
+      pos: 0,
+      list: Object.keys(props.links)[0],
+      isFullScreen: false,
+    };
   }
 
   componentDidMount() {
     window.addEventListener("keydown", this.handleKeys);
+    const video = document.querySelector(".item-container > video");
+    if (video) {
+      video.addEventListener("fullscreenchange", this.handleFullScreenChange, {
+        capture: false,
+        passive: true,
+      });
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeys);
   }
+
+  componentDidUpdate() {
+    const video = document.querySelector(".item-container > video");
+    if (video) {
+      video.addEventListener("fullscreenchange", this.handleFullScreenChange, {
+        capture: false,
+        passive: true,
+      });
+    }
+  }
+
+  handleFullScreenChange = e => {
+    if (
+      document.fullscreenElement &&
+      document.fullscreenElement.matches(".item-container > video")
+    ) {
+      this.setState({ isFullScreen: true });
+    } else {
+      this.setState({ isFullScreen: false });
+    }
+  };
 
   handleKeys = e => {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
@@ -57,18 +89,18 @@ export default class Viewer extends Component {
 
   next = () => {
     this.setState(({ pos, list }, { links }) => ({
-      pos: Math.min(pos + 1, links[list].length - 1)
+      pos: Math.min(pos + 1, links[list].length - 1),
     }));
   };
 
   prev = () => {
     this.setState(({ pos }) => ({
-      pos: Math.max(pos - 1, 0)
+      pos: Math.max(pos - 1, 0),
     }));
   };
 
   render() {
-    const { pos, list } = this.state;
+    const { pos, list, isFullScreen } = this.state;
     const { links } = this.props;
     return (
       <div className="viewer-container">
@@ -88,7 +120,7 @@ export default class Viewer extends Component {
             Next
           </button>
         </div>
-        <Show link={links[list][pos]} />
+        <Show link={links[list][pos]} keepFullScreen={isFullScreen} />
       </div>
     );
   }
