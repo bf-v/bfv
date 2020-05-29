@@ -80,8 +80,8 @@ export default class Viewer extends Component {
             value={list}
             onChange={e => this.setState({ list: e.target.value })}
           >
-            {Object.keys(links).map(l => (
-              <option value={l}>{l}</option>
+            {Object.keys(links).map((l, index) => (
+              <option key={index} value={l}>{l}</option>
             ))}
           </select>
           <button disabled={pos === links[list].length - 1} onClick={this.next}>
