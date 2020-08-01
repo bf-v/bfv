@@ -3,53 +3,6 @@ import "./Show.css";
 
 const tumblr_re = /^\d+?\.media\.tumblr\.com$/;
 
-const gfycatStoreKey = "gfycatUrls";
-const GfycatStore = (() => {
-  let store;
-  try {
-    store = JSON.parse(localStorage.getItem(gfycatStoreKey) || "{}");
-  } catch (e) {
-    store = {};
-  }
-
-  const cleanExpired = () => {
-    const now = new Date();
-    for (const id in store) {
-      if (store[id].expiresAt <= now) delete store[id];
-    }
-  };
-
-  return {
-    get: async gfyId => {
-      cleanExpired();
-      if (!(gfyId in store)) {
-        const resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
-        const json = await resp.json();
-        store[gfyId] = {
-          url: json.gfyItem.webmUrl,
-          expiresAt: new Date().getTime() + 1 * 24 * 60 * 60 * 1000 // 1 day
-        };
-      }
-      localStorage.setItem(gfycatStoreKey, JSON.stringify(store));
-      return store[gfyId].url;
-    }
-  };
-})();
-
-class Gfycat extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { webmUrl: null };
-    GfycatStore.get(props.url.pathname.substr(1))
-      .then(webmUrl => this.setState({ webmUrl }))
-      .catch(err => console.error(err));
-  }
-
-  render() {
-    return <video autoPlay loop controls src={this.state.webmUrl} />;
-  }
-}
-
 class Iframe extends Component {
   constructor(props) {
     super(props);
@@ -120,7 +73,9 @@ const Strategy = ({ url }) => {
     case tumblr_re.test(url.host):
       return <Img url={url} />;
     case url.host === "gfycat.com":
-      return <Gfycat url={url} />;
+      const gfyId = url.pathname.substr(1);
+      src = `${url.origin}/ifr/${gfyId}`;
+      break;
     case url.host === "www.xvideos.com":
       title = "xvideos";
       src =
