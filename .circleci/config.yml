@@ -9,7 +9,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "bb:55:52:6c:68:0e:90:15:69:ff:b3:1f:49:51:e6:8d"
+            - "e9:db:42:34:df:58:3d:ba:9b:16:b3:61:6a:52:6f:73"
       - checkout
       - run: npm ci
       - run: npx react-scripts build
