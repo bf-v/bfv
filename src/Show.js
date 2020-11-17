@@ -26,7 +26,7 @@ const GfycatStore = (() => {
         let resp;
         try {
           resp = await fetch(`https://api.redgifs.com/v1/gfycats/${gfyId}`);
-        catch (e) {
+        } catch (e) {
           resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
         }
         const json = await resp.json();
