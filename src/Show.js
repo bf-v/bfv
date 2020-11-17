@@ -23,7 +23,12 @@ const GfycatStore = (() => {
     get: async gfyId => {
       cleanExpired();
       if (!(gfyId in store)) {
-        const resp = await fetch(`https://api.redgifs.com/v1/gfycats/${gfyId}`);
+        let resp;
+        try {
+          resp = await fetch(`https://api.redgifs.com/v1/gfycats/${gfyId}`);
+        catch (e) {
+          resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
+        }
         const json = await resp.json();
         store[gfyId] = {
           url: json.gfyItem.webmUrl,
