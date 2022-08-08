@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Show from "./Show";
+import Show from "./show/Show";
 import "./Viewer.css";
 
 export default class Viewer extends Component {
