@@ -45,15 +45,15 @@ const Strategy = ({ url }) => {
         "https://pictures.hentai-foundry.com",
         username[0].toLowerCase(),
         username,
-        pic_id
+        pic_id,
       ].join("/");
       return (
         <div
           className="img"
           style={{
             backgroundImage: ["png", "jpg"]
-              .map(ext => `url(${src_base}.${ext})`)
-              .join(",")
+              .map((ext) => `url(${src_base}.${ext})`)
+              .join(","),
           }}
         />
       );
@@ -64,20 +64,20 @@ const Strategy = ({ url }) => {
   return <Iframe src={src} title={title} />;
 };
 
-export default function Show({ link: source, style }) {
-  const url = new URL(source);
+export default function Show({ link, style }) {
+  const url = new URL(link);
   return (
-    <div key={source} className="item-container" style={style}>
+    <div key={link} className="item-container" style={style}>
       <div
         style={{
           flexGrow: 0,
           flexShrink: 0,
           padding: 5,
           paddingTop: 0,
-          color: "white"
+          color: "white",
         }}
       >
-        <a href={url} target="_blank" rel="noopener noreferrer">
+        <a href={link} target="_blank" rel="noopener noreferrer">
           Source
         </a>
       </div>

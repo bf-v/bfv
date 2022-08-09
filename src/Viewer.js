@@ -1,95 +1,54 @@
-import React, { Component } from "react";
+import { useRef, useState } from "react";
 import Show from "./show/Show";
 import "./Viewer.css";
+import { useVideoKeys } from "./hooks";
+import VideoContext from "./VideoContext";
 
-export default class Viewer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { pos: 0, list: Object.keys(props.links)[0] };
-  }
+const Viewer = ({ links, resetLinks }) => {
+  const [pos, setPos] = useState(0);
+  const [list, setList] = useState(Object.keys(links)[0]);
+  const videoRef = useRef();
 
-  componentDidMount() {
-    window.addEventListener("keydown", this.handleKeys);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("keydown", this.handleKeys);
-  }
-
-  handleKeys = e => {
-    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
-      return;
-    }
-    const video = document.querySelector(".item-container > video");
-
-    switch (e.code) {
-      case "ArrowLeft":
-      case "KeyA":
-        return this.prev();
-      case "ArrowRight":
-      case "KeyD":
-        return this.next();
-      case "KeyF":
-        if (video) {
-          (
-            video.requestFullscreen ||
-            video.webkitRequestFullScreen ||
-            video.mozRequestFullScreen ||
-            video.msRequestFullScreen ||
-            video.webkitEnterFullScreen ||
-            (() => null)
-          ).bind(video)();
-        }
-        return;
-      case "Space":
-        if (video) {
-          if (video.paused) {
-            video.play();
-          } else {
-            video.pause();
-          }
-        }
-        return;
-      default:
-        return;
-    }
+  const next = () => {
+    setPos((p) => Math.min(p + 1, links[list].length - 1));
   };
 
-  next = () => {
-    this.setState(({ pos, list }, { links }) => ({
-      pos: Math.min(pos + 1, links[list].length - 1)
-    }));
+  const prev = () => {
+    setPos((p) => Math.max(p - 1, 0));
   };
 
-  prev = () => {
-    this.setState(({ pos }) => ({
-      pos: Math.max(pos - 1, 0)
-    }));
-  };
+  useVideoKeys(videoRef, next, prev);
 
-  render() {
-    const { pos, list } = this.state;
-    const { links } = this.props;
-    return (
-      <div className="viewer-container">
-        <div className="button-container">
-          <button disabled={pos === 0} onClick={this.prev}>
-            Previous
-          </button>
-          <select
-            value={list}
-            onChange={e => this.setState({ list: e.target.value })}
-          >
-            {Object.keys(links).map((l, index) => (
-              <option key={index} value={l}>{l}</option>
-            ))}
-          </select>
-          <button disabled={pos === links[list].length - 1} onClick={this.next}>
-            Next
-          </button>
-        </div>
-        <Show link={links[list][pos]} />
+  return (
+    <div className="viewer-container">
+      <div className="button-container">
+        <button disabled={pos === 0} onClick={prev}>
+          Previous
+        </button>
+        <select value={list} onChange={(e) => setList(e.target.value)}>
+          {Object.keys(links).map((l, index) => (
+            <option key={index} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
+        <button disabled={pos === links[list].length - 1} onClick={next}>
+          Next
+        </button>
+        <button
+          id="reset-button"
+          type="button"
+          onClick={resetLinks}
+          title="Start over"
+        >
+          X
+        </button>
       </div>
-    );
-  }
-}
+      <VideoContext.Provider value={videoRef}>
+        <Show link={links[list][pos]} />
+      </VideoContext.Provider>
+    </div>
+  );
+};
+
+export default Viewer;

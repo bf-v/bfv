@@ -1,44 +1,47 @@
-import React, { Component } from "react";
 import GfycatStore from "./GfycatStore";
+import { useContext, useEffect, useState } from "react";
+import VideoContext from "../../VideoContext";
 
-class Gfycat extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { webmUrl: null, error: null };
-    const gfyId = props.url.pathname.substring(1);
-    console.log(`https://gfycat.com/${gfyId}`);
-    GfycatStore.get(gfyId)
-      .then(webmUrl => this.setState({ webmUrl }))
-      .catch(err => {
+const Gfycat = ({ url }) => {
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [error, setError] = useState(null);
+  const gfyId = url.pathname.substring(1);
+  const videoContext = useContext(VideoContext);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setVideoUrl(await GfycatStore.get(gfyId));
+      } catch (err) {
         console.error(err);
-        this.setState({ error: err });
-      });
-  }
+        setError(err);
+      }
+    })();
+  }, [gfyId]);
 
-  render() {
-    if (this.state.error) {
-      return (
-        <div className="error">
-          <div className="error-message">
-            Error loading Gfycat. You can{" "}
-            <a target="_blank" rel="noopener" href={this.props.url}>
-              try the direct link
-            </a>
-            .
-          </div>
-        </div>
-      );
-    }
+  if (error) {
     return (
-      <video
-        autoPlay
-        loop
-        controls
-        src={this.state.webmUrl}
-        onError={error => this.setState({ error })}
-      />
+      <div className="error">
+        <div className="error-message">
+          Error loading Gfycat. You can{" "}
+          <a target="_blank" rel="noopener noreferrer" href={url}>
+            try the direct link
+          </a>
+          .
+        </div>
+      </div>
     );
   }
-}
+  return (
+    <video
+      ref={videoContext}
+      autoPlay
+      loop
+      controls
+      src={videoUrl}
+      onError={(error) => setError(error)}
+    />
+  );
+};
 
 export default Gfycat;
