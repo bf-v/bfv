@@ -8,6 +8,7 @@
 }
 
 .viewer-container .button-container {
+	position: relative;
 	flex-shrink: 0;
 	box-sizing: border-box;
 	display: flex;
@@ -34,10 +35,20 @@
 }
 
 .viewer-container .button-container button {
+	cursor: pointer;
 	margin: 0 10px;
 	padding: 12px 16px;
 }
 
-.viewer-container .button-container button:hover {
-	cursor: pointer;
+.viewer-container .button-container button:disabled {
+	cursor: not-allowed;
+	background-color: #636363;
+}
+
+#reset-button {
+	margin: 0;
+	background-color: #912828;
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
