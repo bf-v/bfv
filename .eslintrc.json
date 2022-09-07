@@ -1,0 +1,13 @@
+{
+  "plugins": ["prettier"],
+  "extends": ["react-app", "prettier"],
+  "rules": {
+    "no-unused-expressions": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "prefer-template": "error",
+    "arrow-body-style": ["error", "as-needed"],
+    "@typescript-eslint/no-explicit-any": "error",
+    "no-console": "error",
+    "no-undef": "off"
+  }
+}

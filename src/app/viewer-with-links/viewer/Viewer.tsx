@@ -1,20 +1,26 @@
-import { useRef, useState } from "react";
-import Show from "./show/Show";
-import "./Viewer.css";
-import { useVideoKeys } from "./hooks";
-import VideoContext from "./VideoContext";
+import { useRef, useState } from 'react';
+import Show from './show/Show';
+import './Viewer.css';
+import { useVideoKeys } from '../../../hooks';
+import VideoContext from './VideoContext';
+import { FileLinks } from '../ViewerWithLinks';
 
-const Viewer = ({ links, resetLinks }) => {
+type Props = {
+  links: FileLinks;
+  resetLinks: () => void;
+};
+
+const Viewer = ({ links, resetLinks }: Props) => {
   const [pos, setPos] = useState(0);
   const [list, setList] = useState(Object.keys(links)[0]);
-  const videoRef = useRef();
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const next = () => {
-    setPos((p) => Math.min(p + 1, links[list].length - 1));
+    setPos(p => Math.min(p + 1, links[list].length - 1));
   };
 
   const prev = () => {
-    setPos((p) => Math.max(p - 1, 0));
+    setPos(p => Math.max(p - 1, 0));
   };
 
   useVideoKeys(videoRef, next, prev);
@@ -25,7 +31,7 @@ const Viewer = ({ links, resetLinks }) => {
         <button disabled={pos === 0} onClick={prev}>
           Previous
         </button>
-        <select value={list} onChange={(e) => setList(e.target.value)}>
+        <select value={list} onChange={e => setList(e.target.value)}>
           {Object.keys(links).map((l, index) => (
             <option key={index} value={l}>
               {l}

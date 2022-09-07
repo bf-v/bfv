@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { parse } from "papaparse";
-import "./ViewerWithLinks.css";
-import Viewer from "./Viewer";
+import { ChangeEvent, useState } from 'react';
+import { parse, ParseResult } from 'papaparse';
+import './ViewerWithLinks.css';
+import Viewer from './viewer/Viewer';
 
-function shuffled(inp) {
+function shuffled<T>(inp: T[]): T[] {
   const arr = inp.slice();
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -12,29 +12,33 @@ function shuffled(inp) {
   return arr;
 }
 
+export type FileLinks = {
+  [key: string]: string[];
+};
+
 const ViewerWithLinks = () => {
-  const [fileLinks, setFileLinks] = useState({});
+  const [fileLinks, setFileLinks] = useState<FileLinks>({});
   const [shuffle, setShuffle] = useState(true);
 
-  const handleFile = (e) => {
-    for (let file of e.target.files) {
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    for (let file of e.target.files || []) {
       parse(file, {
-        complete: (res) =>
-          setFileLinks((oldFileLinks) =>
+        complete: (res: ParseResult<string>) =>
+          setFileLinks(oldFileLinks =>
             Object.keys(oldFileLinks).reduce(
-              (acc, curr) => {
+              (acc: FileLinks, curr: string) => {
                 if (!(curr in acc)) acc[curr] = [];
                 acc[curr].push(...oldFileLinks[curr]);
                 return acc;
               },
-              res.data.reduce((acc, [list, src]) => {
-                if (src && src.startsWith("http")) {
+              res.data.reduce((acc: FileLinks, [list, src]) => {
+                if (src && src.startsWith('http')) {
                   if (!(list in acc)) acc[list] = [];
                   acc[list].push(src);
                 }
                 return acc;
-              }, {})
-            )
+              }, {}),
+            ),
           ),
       });
     }
@@ -46,10 +50,10 @@ const ViewerWithLinks = () => {
         <h1>BFV</h1>
         <button
           id="enable-shuffling"
-          className={shuffle ? "enabled" : "disabled"}
-          onClick={() => setShuffle((s) => !s)}
+          className={shuffle ? 'enabled' : 'disabled'}
+          onClick={() => setShuffle(s => !s)}
         >
-          Shuffling {shuffle ? "enabled" : "disabled"}
+          Shuffling {shuffle ? 'enabled' : 'disabled'}
         </button>
         <div className="file-input-container">
           <input
@@ -66,7 +70,7 @@ const ViewerWithLinks = () => {
   }
   return (
     <Viewer
-      links={Object.keys(fileLinks).reduce((acc, file) => {
+      links={Object.keys(fileLinks).reduce((acc: FileLinks, file) => {
         acc[file] = shuffle ? shuffled(fileLinks[file]) : fileLinks[file];
         return acc;
       }, {})}

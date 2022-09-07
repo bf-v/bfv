@@ -1,4 +1,4 @@
-const getUrlFromRedGifs = async _gfyId => {
+const getUrlFromRedGifs = async (_gfyId: string) => {
   const gfyId = _gfyId.toLowerCase();
   const resp = await fetch(`https://api.redgifs.com/v2/gifs/${gfyId}`);
   const json = await resp.json();
@@ -10,14 +10,16 @@ const getUrlFromRedGifs = async _gfyId => {
   return url.toString();
 };
 
-const getUrlFromGfycat = async gfyId => {
+const getUrlFromGfycat = async (gfyId: string) => {
   const resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
   const json = await resp.json();
   const { gfyItem } = json;
   return gfyItem.mp4Url;
 };
 
-const resolveFirstSequentially = async promises => {
+const resolveFirstSequentially = async <T>(
+  promises: (() => Promise<T>)[],
+): Promise<T> => {
   const errors = [];
   for (const promise of promises) {
     try {
@@ -34,8 +36,15 @@ const resolveFirstSequentially = async promises => {
 
 const gfycatStoreKey = 'gfycatUrls';
 
+type Store = {
+  [key: string]: {
+    expiresAt: number;
+    url: string;
+  };
+};
+
 const GfycatStore = (() => {
-  let store;
+  let store: Store;
   try {
     store = JSON.parse(localStorage.getItem(gfycatStoreKey) || '{}');
   } catch (e) {
@@ -43,17 +52,17 @@ const GfycatStore = (() => {
   }
 
   const cleanExpired = () => {
-    const now = new Date();
+    const now = new Date().getTime();
     for (const id in store) {
       if (store[id].expiresAt <= now) delete store[id];
     }
   };
 
   return {
-    get: async gfyId => {
+    get: async (gfyId: string) => {
       cleanExpired();
       if (!(gfyId in store)) {
-        const url = await resolveFirstSequentially([
+        const url = await resolveFirstSequentially<string>([
           () => getUrlFromRedGifs(gfyId),
           () => getUrlFromGfycat(gfyId),
         ]);

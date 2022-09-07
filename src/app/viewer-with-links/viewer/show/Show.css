@@ -1,0 +1,53 @@
+div.img {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.item-container {
+  flex-grow: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-container > * {
+  flex-grow: 1;
+}
+
+img.loading {
+  background: url('../../../../static/loading.gif') center center no-repeat;
+}
+
+img.error {
+  background: url('../../../../static/img_error.png') center center no-repeat;
+}
+
+.iframe-loading {
+  background: url('../../../../static/loading.gif') center center no-repeat;
+  display: flex;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #ff6161;
+}
+
+#source-link-container {
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+
+#source-link-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#source-link-container a:hover {
+  text-decoration: underline;
+}

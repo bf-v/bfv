@@ -1,0 +1,36 @@
+name: Build test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 16.x 🐧
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Run ESLint and TypeScript checks 🚨
+        run: |
+          npm install @microsoft/eslint-formatter-sarif@2.1.7
+          npx eslint src --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+          npx tsc --project .
+
+      - name: Upload analysis results to GitHub 🚀
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: eslint-results.sarif
+          wait-for-processing: true
