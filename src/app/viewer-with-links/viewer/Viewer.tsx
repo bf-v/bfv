@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
 import Show from './show/Show';
 import './Viewer.css';
-import { useVideoKeys } from '../../../hooks';
+import { useFullscreenKey, useSwipeKeys, useVideoKeys } from '../../../hooks';
 import VideoContext from './VideoContext';
 import { FileLinks } from '../ViewerWithLinks';
+import maximizeIcon from './maximize-icon.svg';
 
 type Props = {
   links: FileLinks;
@@ -23,11 +24,23 @@ const Viewer = ({ links, resetLinks }: Props) => {
     setPos(p => Math.max(p - 1, 0));
   };
 
-  useVideoKeys(videoRef, next, prev);
+  useVideoKeys(videoRef, prev, next);
+  useSwipeKeys(next, prev);
+  const toggleFullscreen = useFullscreenKey();
 
   return (
     <div className="viewer-container">
       <div className="button-container">
+        {toggleFullscreen && (
+          <button
+            id="maximize-button"
+            type="button"
+            onClick={toggleFullscreen}
+            title="Enter/exit fullscreen"
+          >
+            <img alt="Maximize" src={maximizeIcon} />
+          </button>
+        )}
         <button disabled={pos === 0} onClick={prev}>
           Previous
         </button>
