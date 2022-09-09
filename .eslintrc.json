@@ -7,7 +7,7 @@
     "prefer-template": "error",
     "arrow-body-style": ["error", "as-needed"],
     "@typescript-eslint/no-explicit-any": "error",
-    "no-console": "error",
+    "no-console": "warn",
     "no-undef": "off",
     "curly": "error",
     "prettier/prettier": "error"
