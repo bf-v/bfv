@@ -27,13 +27,17 @@ const ViewerWithLinks = () => {
           setFileLinks(oldFileLinks =>
             Object.keys(oldFileLinks).reduce(
               (acc: FileLinks, curr: string) => {
-                if (!(curr in acc)) acc[curr] = [];
+                if (!(curr in acc)) {
+                  acc[curr] = [];
+                }
                 acc[curr].push(...oldFileLinks[curr]);
                 return acc;
               },
               res.data.reduce((acc: FileLinks, [list, src]) => {
                 if (src && src.startsWith('http')) {
-                  if (!(list in acc)) acc[list] = [];
+                  if (!(list in acc)) {
+                    acc[list] = [];
+                  }
                   acc[list].push(src);
                 }
                 return acc;

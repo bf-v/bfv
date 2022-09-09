@@ -9,6 +9,7 @@
     "@typescript-eslint/no-explicit-any": "error",
     "no-console": "error",
     "no-undef": "off",
-    "curly": "error"
+    "curly": "error",
+    "prettier/prettier": "error"
   }
 }
