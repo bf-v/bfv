@@ -54,7 +54,9 @@ const GfycatStore = (() => {
   const cleanExpired = () => {
     const now = new Date().getTime();
     for (const id in store) {
-      if (store[id].expiresAt <= now) delete store[id];
+      if (store[id].expiresAt <= now) {
+        delete store[id];
+      }
     }
   };
 
