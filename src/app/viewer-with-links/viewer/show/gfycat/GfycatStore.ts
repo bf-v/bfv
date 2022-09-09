@@ -1,8 +1,9 @@
-const getUrlFromRedGifs = async (_gfyId: string) => {
+import axios from 'axios';
+
+export const getUrlFromRedGifs = async (_gfyId: string) => {
   const gfyId = _gfyId.toLowerCase();
-  const resp = await fetch(`https://api.redgifs.com/v2/gifs/${gfyId}`);
-  const json = await resp.json();
-  const { urls } = json.gif;
+  const { data } = await axios.get(`https://api.redgifs.com/v2/gifs/${gfyId}`);
+  const { urls } = data.gif;
   const url = new URL(urls.hd || urls.sd);
   if (url.hostname === 'thumbs2.redgifs.com') {
     url.hostname = 'thumbs3.redgifs.com';
@@ -10,10 +11,11 @@ const getUrlFromRedGifs = async (_gfyId: string) => {
   return url.toString();
 };
 
-const getUrlFromGfycat = async (gfyId: string) => {
-  const resp = await fetch(`https://api.gfycat.com/v1/gfycats/${gfyId}`);
-  const json = await resp.json();
-  const { gfyItem } = json;
+export const getUrlFromGfycat = async (gfyId: string) => {
+  const { data } = await axios.get(
+    `https://api.gfycat.com/v1/gfycats/${gfyId}`,
+  );
+  const { gfyItem } = data;
   return gfyItem.mp4Url;
 };
 
