@@ -1,6 +1,6 @@
 # BFV(iewer) fork
 
-[![Build test](https://github.com/bf-c/bfv/actions/workflows/build-test.yml/badge.svg)](https://github.com/bf-c/bfv/actions/workflows/build-test.yml)
+[![Build test](https://github.com/bf-c/bfv/actions/workflows/build-test.yml/badge.svg)](https://github.com/bf-c/bfv/actions/workflows/build-test.yml?query=event%3Apush)
 [![codecov](https://codecov.io/gh/bf-c/bfv/branch/master/graph/badge.svg?token=GNT0HRZ34D)](https://codecov.io/gh/bf-c/bfv)
 
 This is a fork of the [original][1], which seems to be abandoned.
