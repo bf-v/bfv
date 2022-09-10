@@ -6,7 +6,6 @@ div.img {
 
 .item-container {
   flex-grow: 1;
-  padding: 10px;
   display: flex;
   flex-direction: column;
 }
@@ -34,20 +33,4 @@ img.error {
   justify-content: center;
   font-size: 18px;
   color: #ff6161;
-}
-
-#source-link-container {
-  flex-grow: 0;
-  flex-shrink: 0;
-  margin-bottom: 4px;
-}
-
-#source-link-container a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-#source-link-container a:hover {
-  text-decoration: underline;
 }

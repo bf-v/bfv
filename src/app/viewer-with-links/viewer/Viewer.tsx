@@ -4,7 +4,14 @@ import './Viewer.css';
 import { useFullscreenKey, useSwipeKeys, useVideoKeys } from '../../../hooks';
 import VideoContext from './VideoContext';
 import { FileLinks } from '../ViewerWithLinks';
-import maximizeIcon from './maximize-icon.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faLink,
+  faMaximize,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
   links: FileLinks;
@@ -31,37 +38,66 @@ const Viewer = ({ links, resetLinks }: Props) => {
   return (
     <div className="viewer-container">
       <div className="button-container">
-        {toggleFullscreen && (
-          <button
-            id="maximize-button"
-            type="button"
-            onClick={toggleFullscreen}
-            title="Enter/exit fullscreen"
+        <div id="absolute-left">
+          {toggleFullscreen && (
+            <button
+              id="maximize-button"
+              className="btn icon"
+              type="button"
+              onClick={toggleFullscreen}
+              title="Enter/exit fullscreen"
+            >
+              <FontAwesomeIcon icon={faMaximize} />
+            </button>
+          )}
+          <a
+            id="source-link"
+            className="btn icon"
+            href={links[list][pos]}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <img alt="Maximize" src={maximizeIcon} />
-          </button>
-        )}
-        <button disabled={pos === 0} onClick={prev}>
-          Previous
+            <FontAwesomeIcon icon={faLink} />
+          </a>
+        </div>
+        <button
+          type="button"
+          className="btn icon"
+          disabled={pos === 0}
+          onClick={prev}
+        >
+          <FontAwesomeIcon icon={faChevronLeft} />
         </button>
-        <select value={list} onChange={e => setList(e.target.value)}>
+        <select
+          className="btn"
+          value={list}
+          onChange={e => setList(e.target.value)}
+        >
           {Object.keys(links).map((l, index) => (
             <option key={index} value={l}>
               {l}
             </option>
           ))}
         </select>
-        <button disabled={pos === links[list].length - 1} onClick={next}>
-          Next
-        </button>
         <button
-          id="reset-button"
           type="button"
-          onClick={resetLinks}
-          title="Start over"
+          className="btn icon"
+          disabled={pos === links[list].length - 1}
+          onClick={next}
         >
-          X
+          <FontAwesomeIcon icon={faChevronRight} />
         </button>
+        <div id="absolute-right">
+          <button
+            id="reset-button"
+            className="btn icon"
+            type="button"
+            onClick={resetLinks}
+            title="Start over"
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
       </div>
       <VideoContext.Provider value={videoRef}>
         <Show link={links[list][pos]} />
