@@ -28,7 +28,7 @@ const Strategy = ({ url }: StrategyProps) => {
     case tumblr_re.test(url.host): {
       return <Img url={url} />;
     }
-    case url.host === 'gfycat.com': {
+    case url.host === 'gfycat.com' || url.host === 'redgifs.com': {
       return <Gfycat url={url} />;
     }
     case url.host === 'www.xvideos.com': {
@@ -83,11 +83,6 @@ export default function Show({ link }: ShowProps) {
   const url = new URL(link);
   return (
     <div key={link} className="item-container">
-      <div id="source-link-container" style={{}}>
-        <a href={link} target="_blank" rel="noopener noreferrer">
-          Source
-        </a>
-      </div>
       <Strategy url={url} />
     </div>
   );

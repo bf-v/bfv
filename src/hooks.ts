@@ -2,29 +2,46 @@ import { MutableRefObject, useEffect } from 'react';
 
 type SimpleFn = () => unknown;
 
+const seekTime = 5;
+
 export const useVideoKeys = (
   videoRef: MutableRefObject<HTMLVideoElement | null>,
   prev: SimpleFn,
   next: SimpleFn,
-) => {
+): void => {
   const handleKeys = (e: KeyboardEvent) => {
     const video = videoRef.current;
-    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+    if (e.ctrlKey || e.altKey || e.metaKey) {
       return;
     }
 
     switch (e.code) {
       case 'ArrowLeft':
       case 'KeyA': {
-        prev();
+        if (e.shiftKey) {
+          if (video?.currentTime) {
+            video.currentTime -= seekTime;
+          }
+        } else {
+          prev();
+        }
         return;
       }
       case 'ArrowRight':
       case 'KeyD': {
-        next();
+        if (e.shiftKey) {
+          if (video?.currentTime) {
+            video.currentTime += seekTime;
+          }
+        } else {
+          next();
+        }
         return;
       }
       case 'Space': {
+        if (e.shiftKey) {
+          return;
+        }
         if (video && document.activeElement !== video) {
           if (video.paused) {
             video.play();
@@ -32,9 +49,6 @@ export const useVideoKeys = (
             video.pause();
           }
         }
-        return;
-      }
-      default: {
         return;
       }
     }
