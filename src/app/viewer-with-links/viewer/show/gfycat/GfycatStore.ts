@@ -1,8 +1,34 @@
 import axios from 'axios';
 
+const getRedGifsToken = async () => {
+  let token: string | null = null;
+  const TOKEN_KEY_NAME = 'redgifs_token';
+  if (
+    typeof localStorage !== 'undefined' &&
+    localStorage.getItem(TOKEN_KEY_NAME)
+  ) {
+    token = localStorage.getItem(TOKEN_KEY_NAME);
+  } else {
+    const { data } = await axios.get(
+      'https://api.redgifs.com/v2/auth/temporary',
+    );
+    token = data.token;
+  }
+  if (token) {
+    localStorage.setItem(TOKEN_KEY_NAME, token);
+  }
+  return token;
+};
+
 export const getUrlFromRedGifs = async (_gfyId: string) => {
+  const token = await getRedGifsToken();
+  if (!token) {
+    return null;
+  }
   const gfyId = _gfyId.toLowerCase();
-  const { data } = await axios.get(`https://api.redgifs.com/v2/gifs/${gfyId}`);
+  const { data } = await axios.get(`https://api.redgifs.com/v2/gifs/${gfyId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   const { urls } = data.gif;
   const url = new URL(urls.hd || urls.sd);
   if (url.hostname === 'thumbs2.redgifs.com') {
@@ -66,7 +92,7 @@ const GfycatStore = (() => {
     get: async (gfyId: string) => {
       cleanExpired();
       if (!(gfyId in store)) {
-        const url = await resolveFirstSequentially<string>([
+        const url = await resolveFirstSequentially<string | null>([
           () => getUrlFromRedGifs(gfyId),
           () => getUrlFromGfycat(gfyId),
         ]);
