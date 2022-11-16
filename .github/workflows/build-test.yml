@@ -43,6 +43,7 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
+          version: "v0.1.15"
 
       - name: Upload analysis results to GitHub 🚀
         if: always()
