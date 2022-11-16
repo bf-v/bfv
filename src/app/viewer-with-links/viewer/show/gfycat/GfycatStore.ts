@@ -14,7 +14,7 @@ const getRedGifsToken = async () => {
     );
     token = data.token;
   }
-  if (token) {
+  if (token && typeof localStorage !== 'undefined') {
     localStorage.setItem(TOKEN_KEY_NAME, token);
   }
   return token;
