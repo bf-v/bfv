@@ -2,7 +2,7 @@ import { MutableRefObject, useEffect } from 'react';
 
 type SimpleFn = () => unknown;
 
-const seekTime = 5;
+const seekTime = 3;
 
 export const useVideoKeys = (
   videoRef: MutableRefObject<HTMLVideoElement | null>,
