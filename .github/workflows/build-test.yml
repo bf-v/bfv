@@ -1,6 +1,7 @@
 name: Build test
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
