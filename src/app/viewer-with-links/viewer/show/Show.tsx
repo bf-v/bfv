@@ -29,7 +29,7 @@ const Strategy = ({ url }: StrategyProps) => {
       return <Img url={url} />;
     }
     case url.host === 'gfycat.com' || url.host === 'redgifs.com': {
-      return <Gfycat url={url} />;
+      return <Gfycat title={title} url={url} />;
     }
     case url.host === 'www.xvideos.com': {
       const matches = url.pathname.match(/\/video(\d+)\//);

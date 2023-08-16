@@ -1,12 +1,14 @@
 import GfycatStore from './GfycatStore';
 import { useContext, useEffect, useState } from 'react';
 import VideoContext from '../../VideoContext';
+import Iframe from '../Iframe';
 
 type GfycatProps = {
+  title: string;
   url: URL;
 };
 
-const Gfycat = ({ url }: GfycatProps) => {
+const Gfycat = ({ url, title }: GfycatProps) => {
   const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
   const [error, setError] = useState<unknown | null>(null);
   const gfyId = url.pathname.substring(1);
@@ -24,15 +26,7 @@ const Gfycat = ({ url }: GfycatProps) => {
 
   if (error) {
     return (
-      <div className="error">
-        <div className="error-message">
-          Error loading Gfycat. You can{' '}
-          <a target="_blank" rel="noopener noreferrer" href={url.toString()}>
-            try the direct link
-          </a>
-          .
-        </div>
-      </div>
+      <Iframe src={`https://www.redgifs.com/ifr/${gfyId}`} title={title} />
     );
   }
   return (
